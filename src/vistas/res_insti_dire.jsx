@@ -64,10 +64,10 @@ function ListaLab() {
         fetchLab();
     }, []);
 
-    const handleModificarInfo = (labToEdit) => {
-       return;
+    const handleModificarInfo = (userToEdit) => {
+        navigate('/complete_institutos', { state: { userToEdit } });
     };
-    const handleVerInfo = (userToEdit) => {
+    const ViewInfo_insti = (userToEdit) => {
         navigate('/info_laboratorio', { state: { userToEdit } });
     };
 
@@ -148,7 +148,7 @@ function ListaLab() {
                                             <Grid item xs={12} sm={4}>
                                                 <IconButton
                                                     style={{ backgroundColor: '#64001D', color: '#FFFFFF' }}
-                                                    
+                                                    onClick={() => ViewInfo_insti(user)}
                                                 >
                                                     <VisibilityIcon />
                                                 </IconButton>

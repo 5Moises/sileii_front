@@ -59,6 +59,8 @@ import View_director_1 from "./vistas/view_director";
 import Res_users_dire from "./vistas/res_users_director";
 import Add_users_dire from "./vistas/add_comite_director";
 
+import Complete_inti from "./vistas/complete_institutos";
+
 
 
 function App() {
@@ -68,7 +70,9 @@ function App() {
         {/* Rutas de Director*/}
         <Route path="/res_users_director" element={<Layout><Res_users_dire /></Layout>} />
         <Route path="/add_comite_director" element={<Layout><Add_users_dire /></Layout>} />
+        <Route path="/complete_institutos" element={<Layout><Complete_inti /></Layout>} />
 
+        
 
         {/* Rutas de Autenticación */}
         <Route path="/" element={<NavbarLogin><Login /></NavbarLogin>} />
