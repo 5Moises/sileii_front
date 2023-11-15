@@ -61,6 +61,7 @@ import Add_users_dire from "./vistas/add_comite_director";
 
 import Complete_inti from "./vistas/complete_institutos";
 
+import Info_insti from "./vistas/info_intituto";
 
 
 function App() {
@@ -71,7 +72,7 @@ function App() {
         <Route path="/res_users_director" element={<Layout><Res_users_dire /></Layout>} />
         <Route path="/add_comite_director" element={<Layout><Add_users_dire /></Layout>} />
         <Route path="/complete_institutos" element={<Layout><Complete_inti /></Layout>} />
-
+        <Route path="/info_intituto" element={<Layout><Info_insti /></Layout>} />
         
 
         {/* Rutas de Autenticación */}

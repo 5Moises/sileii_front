@@ -68,7 +68,7 @@ function ListaLab() {
         navigate('/complete_institutos', { state: { userToEdit } });
     };
     const ViewInfo_insti = (userToEdit) => {
-        navigate('/info_laboratorio', { state: { userToEdit } });
+        navigate('/info_intituto', { state: { userToEdit } });
     };
 
     const filteredUsers = Rol.filter((user) =>
