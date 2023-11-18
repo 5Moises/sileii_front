@@ -70,7 +70,7 @@ function ListaLab() {
 
             if (response.status === 200) {
                 const filteredData = response.data.coordLabs.filter(entry => entry.estado === true);
-                const transformedData = filteredData.map(entry => ({                
+                const transformedData = filteredData.map(entry => ({
                     laboratorio: entry.laboratorio.nombre,
                     responsable: `${entry.coordinador.nombre} ${entry.coordinador.apellido_paterno} ${entry.coordinador.apellido_materno}`,
                     estado: entry.estado,
@@ -107,8 +107,7 @@ function ListaLab() {
     const handleOperador = (userToEdit) => navigate('/op_list', { state: { userToEdit } });
 
 
-
-
+    
 
 
     return (
@@ -154,9 +153,9 @@ function ListaLab() {
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '110%', width:'37%' }}>Laboratorio</TableCell>
-                                <TableCell sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '110%', width:'37%' }}>Responsable</TableCell>
-                                <TableCell sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '110%' , width:'25%' }}>Actividad</TableCell>
+                                <TableCell sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '110%', width: '37%' }}>Laboratorio</TableCell>
+                                <TableCell sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '110%', width: '37%' }}>Responsable</TableCell>
+                                <TableCell sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '110%', width: '25%' }}>Actividad</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -182,17 +181,17 @@ function ListaLab() {
                                                 >
                                                     completar
                                                 </Button>
-                                               
+
                                             </Grid>
                                             <Grid item xs={12} sm={5}>
                                                 <Button
                                                     variant="contained"
                                                     style={{ backgroundColor: '#64001D', color: '#FFFFFF' }}
-                                                    onClick={() => handleOperador(user)}                                                 
+                                                    onClick={() => handleOperador(user)}
                                                 >
                                                     Operador
                                                 </Button>
-                                               
+
                                             </Grid>
                                         </Grid>
                                     </TableCell>

@@ -3,7 +3,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios'; // Asumiendo que estás usando axios para las peticiones HTTP
 import { API_BASE_URL } from '../js/config';
-import { MenuItem, Select, Container, Grid, TextField, Button, Typography, IconButton, Paper, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel } from '@mui/material';
+import { ListItemText, Checkbox, MenuItem, Select, Container, Grid, TextField, Button, Typography, IconButton, Paper, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel } from '@mui/material';
 
 const MyFormPage = () => {
     const navigate = useNavigate();
@@ -12,16 +12,16 @@ const MyFormPage = () => {
     const location = useLocation(); // Accede a la ubicación actual en la navegación
     const labToEdit = location.state?.userToEdit || {};
     const fileInputRef = useRef();
-    const [fileName, setFileName] = useState(labToEdit?.nombre_documento || "");  // Inicializa fileName con el valor de labToEdit.nombre_documento
+    const [fileName, setFileName] = useState(labToEdit?.nombre_mision || "");  // Inicializa fileName con el valor de labToEdit.nombre_mision
     const [selectedFile, setSelectedFile] = useState(null);
 
 
-    const [idUsuario, setIdUsuario] = useState(parseInt(labToEdit.usuario_id, 10));
-    const [documento, setDocumento] = useState(labToEdit.dni || '');
-    const [nombreUsuario, setNombreUsuario] = useState(labToEdit.nombre || '');
-    const [apellidoPaterno, setApellidoPaterno] = useState(labToEdit.apellido_paterno || '');
+    const [instituto_id, SetInstituto_id] = useState(parseInt(labToEdit?.instituto_id, 10));
+    const [mision, setmision] = useState(labToEdit.mision || '');
+    const [vision, setvision] = useState(labToEdit.vision || '');
+    const [historia, sethistoria] = useState(labToEdit.historia || '');
     const [apellidoMaterno, setApellidoMaterno] = useState(labToEdit.apellido_materno || '');
-    const [direccionUsuario, setDireccionUsuario] = useState(labToEdit.direccion); // Valor fijo 'UNSA'
+    const [, setDireccionUsuario] = useState(labToEdit.direccion); // Valor fijo 'UNSA'
     const [telefonoUsuario, setTelefonoUsuario] = useState(labToEdit.telefono || '');
     const [email, setEmail] = useState(labToEdit.correo || '');
     const [password, setPassword] = useState(labToEdit.password || '');
@@ -29,6 +29,7 @@ const MyFormPage = () => {
     const [estado, setEstado] = useState(true);
     const [categoria, setCategoria] = useState(labToEdit.categoria || "Principal"); // Supongamos que el valor predeterminado es 5
     const [regimen, setRegimen] = useState(labToEdit.regimen || "Tiempo Parcial"); // Supongamos que el valor predeterminado es 5
+    const [selectedRoles, setSelectedRoles] = useState([]);
 
     const [error, setError] = useState(false);
 
@@ -68,7 +69,7 @@ const MyFormPage = () => {
         setFileName(file.name);
     };
     const handleSave = async () => {
-        if (!documento || !nombreUsuario || !apellidoPaterno || !apellidoMaterno || !direccionUsuario || !telefonoUsuario || !email || !password || !idRol || !categoria || !regimen) {
+        if (!mision || !vision || !historia || !apellidoMaterno || !direccionUsuario || !telefonoUsuario || !email || !password || !idRol || !categoria || !regimen) {
             setError(true);
             setDialogMessage("Hay campos obligatorios que debe completar.");
             setDialogOpen(true);
@@ -77,8 +78,8 @@ const MyFormPage = () => {
 
         setError(false);
         const token = localStorage.getItem('token');
-        let nombreusuario = nombreUsuario;
-        let apellidopa = apellidoPaterno;
+        let vision = vision;
+        let apellidopa = historia;
         let apellidoma = apellidoMaterno;
         let direccionusuario = direccionUsuario;
         let telefonousuario = telefonoUsuario;
@@ -86,8 +87,8 @@ const MyFormPage = () => {
         if (idUsuario) {
             try {
                 const response = await axios.put(`${API_BASE_URL}comiteDirectivo/${idUsuario}`, {
-                    documento,
-                    nombreusuario,
+                    mision,
+                    vision,
                     apellidopa,
                     apellidoma,
                     direccionusuario,
@@ -121,8 +122,8 @@ const MyFormPage = () => {
         else {
             try {
                 const response = await axios.post(`${API_BASE_URL}comiteDirectivo`, {
-                    documento,
-                    nombreusuario,
+                    mision,
+                    vision,
                     apellidopa,
                     apellidoma,
                     direccionusuario,
@@ -166,7 +167,24 @@ const MyFormPage = () => {
     };
     const handleFileNameChange = (e) => {
         setFileName(e.target.value);
-      };
+    };
+
+    // Actualiza la función de manejo de cambios para manejar un array de valores
+
+
+    // Datos de ejemplo para los roles del comité directivo
+    const roles = [
+        { id: 1, name: 'Presidente' },
+        { id: 2, name: 'Vicepresidente' },
+        { id: 3, name: 'Secretario' },
+        { id: 4, name: 'Tesorero' },
+        // ... otros roles
+    ];
+
+    const handleChange = (event) => {
+        // Set the selected roles to the new value
+        setSelectedRoles(event.target.value);
+    };
 
     return (
         <Container maxWidth="md" sx={{ py: 8 }}> {/* Padding top and bottom */}
@@ -192,8 +210,8 @@ const MyFormPage = () => {
                                 shrink: true,
                             }}
                             fullWidth
-                            value={nombreUsuario}
-                            onChange={(e) => setNombreUsuario(e.target.value)}
+                            value={vision}
+                            onChange={(e) => setvision(e.target.value)}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -204,8 +222,8 @@ const MyFormPage = () => {
                                 shrink: true,
                             }}
                             fullWidth
-                            value={apellidoPaterno}
-                            onChange={(e) => setApellidoPaterno(e.target.value)}
+                            value={historia}
+                            onChange={(e) => sethistoria(e.target.value)}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -228,45 +246,36 @@ const MyFormPage = () => {
                                 shrink: true,
                             }}
                             fullWidth
-                            value={documento}
-                            onChange={(e) => setDocumento(e.target.value)}
+                            value={mision}
+                            onChange={(e) => setmision(e.target.value)}
                         />
                     </Grid>
 
 
 
 
-                    <Grid item xs={12} container alignItems="flex-end" spacing={2}>
-                        <Grid item xs={6}>
-                            <FormControl variant="outlined" fullWidth>
-                                <InputLabel id="demo-simple-select-label">
-                                    Comité Directivo
-                                </InputLabel>
-                                <Select
-                                    name="rol"
-                                    label="Comité Directivo"
-                                    size='small'
-                                    value={idRol}
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    onChange={(e) => setIdRol(e.target.value)}
-                                >
-                                    <MenuItem value={5}>Comité Directivo</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Button
-                                variant="contained"
-                                onClick={handleCancel}
-                                sx={{
-                                    height: '40px', // Usa theme.spacing para mantener la consistencia
-                                    marginTop: '0px' // Ajusta este valor según sea necesario
-                                }}
+                    <Grid item xs={12}>
+
+                        <FormControl variant="outlined" fullWidth>
+                            <InputLabel id="demo-multiple-checkbox-label">Comité Directivo</InputLabel>
+                            <Select
+                                labelId="demo-multiple-checkbox-label"
+                                id="demo-multiple-checkbox"
+                                multiple
+                                value={selectedRoles}
+                                onChange={handleChange}
+                                renderValue={(selected) => selected.map(id => roles.find(role => role.id === id).name).join(', ')}
+                                label="Comité Directivo"
                             >
-                                Agregar
-                            </Button>
-                        </Grid>
+                                {roles.map((role) => (
+                                    <MenuItem key={role.id} value={role.id}>
+                                        <Checkbox checked={selectedRoles.indexOf(role.id) > -1} />
+                                        <ListItemText primary={role.name} />
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+
                     </Grid>
 
 
@@ -289,7 +298,7 @@ const MyFormPage = () => {
                             <TextField
                                 fullWidth
                                 name="fileName"
-                                label="Nombre del Documento"
+                                label="Nombre del mision"
                                 variant="outlined"
                                 size='small'
                                 margin="dense"

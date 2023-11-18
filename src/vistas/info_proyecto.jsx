@@ -8,8 +8,8 @@ import { useNavigate } from 'react-router-dom';
 
 function App() {
     const location = useLocation();
-    const labData = location.state?.userToEdit; 
-    
+    const labData = location.state?.userToEdit;
+
     return (
         <Container maxWidth="lg" sx={{
             minHeight: '80vh',
@@ -56,12 +56,12 @@ function App() {
                                 {/* Columna Izquierda (Imagen y Botones) */}
                                 <Grid item xs={12} sm={12} md={2} lg={2}>
                                     <Typography variant="h6" gutterBottom align="right" style={{ color: "#64001D", fontWeight: "bold" }}>
-                                        Duración
+                                        duracion
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12} sm={12} md={6} lg={6}>
                                     <Typography gutterBottom align="right">
-                                        1 dia
+                                        {labData.duracion}
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -78,7 +78,7 @@ function App() {
                                 </Grid>
                                 <Grid item xs={12} sm={12} md={10} lg={10}>
                                     <Typography gutterBottom align="left">
-                                        En Proceso
+                                        {labData.etapa}
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -93,7 +93,7 @@ function App() {
                                 </Grid>
                                 <Grid item xs={12} sm={12} md={6} lg={6}>
                                     <Typography gutterBottom align="right">
-                                        Lorem ipsum dolor sit amet.
+                                        {labData.lineas_investigacion}
                                     </Typography>
                                 </Grid>
                             </Grid>

@@ -176,10 +176,9 @@ function G_Proyects() {
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '110%' }}>ID</TableCell>
                 <TableCell sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '110%' }}>Nombre</TableCell>
-                <TableCell sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '110%' }}>Investigador</TableCell>
-                <TableCell sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '110%' }}>Co-Investigadores</TableCell>
-                <TableCell sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '110%' }}>DOI</TableCell>
+                <TableCell sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '110%' }}>Estado</TableCell>
                 <TableCell sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '110%' }}>Actividad</TableCell>
 
               </TableRow>
@@ -188,9 +187,8 @@ function G_Proyects() {
               {paginatedItems.map((document, index) => (
                 <TableRow key={index}>
                   <TableCell sx={{ textAlign: 'center' }}>{document.nombre_proyecto}</TableCell>
-                  <TableCell sx={{ textAlign: 'center' }}>{document.investigador_principal}</TableCell>
-                  <TableCell sx={{ textAlign: 'center' }}>{document.coinvestigadores}</TableCell>
-                  <TableCell sx={{ textAlign: 'center' }}>{document.doi}</TableCell>
+                  <TableCell sx={{ textAlign: 'center' }}>{document.nombre_proyecto}</TableCell>
+                  <TableCell sx={{ textAlign: 'center' }}>{document.etapa}</TableCell>
                   <TableCell sx={{ textAlign: 'center' }}>
                     <Grid container spacing={1} alignItems="center" justifyContent="center">
                       <Grid item xs={12} sm={4}>

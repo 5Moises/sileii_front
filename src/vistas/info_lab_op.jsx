@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 
 import { useNavigate } from 'react-router-dom';
 
-function App() {    
+function App() {
     const location = useLocation();
     const labData = location.state?.userToEdit;
     const navigate = useNavigate();
@@ -22,14 +22,17 @@ function App() {
         }
     };
 
-    const handlecrudequipos = () => {      
+    const handlecrudequipos = () => {
         navigate('/res_equipment', { state: { labData } });
     };
-    const handlecrudproyects = () => {       
+    const handlecrudproyects = () => {
         navigate('/ManageProyects', { state: { labData } });
     };
-    const handlecruddocuments = () => {       
-        navigate('/ManageDocuments', { state: { labData } });
+    const handlecrudoposted = () => {
+        navigate('/res_publicaciones_public', { state: { labData } });
+    };
+    const handlecrudservice = () => {
+        navigate('/res_servicios_public', { state: { labData } });
     };
     //ManageDocuments
 
@@ -42,7 +45,7 @@ function App() {
             flexDirection: 'column',
             justifyContent: 'top',
             alignItems: 'top',
-           
+
         }}>
             <Grid container spacing={4} justifyContent="center" alignItems="center">
 
@@ -52,18 +55,7 @@ function App() {
                     <Box display="flex" justifyContent="space-between" alignItems="center" flexDirection="column" height="100%">
                         <img src={Escudo} alt="Logo-Sileii" style={{ maxWidth: "100%", height: "auto" }} />
 
-                        <Box display="flex" justifyContent="center" alignItems="center">
-                            <Button variant="contained" color="primary" style={{ margin: "10px", fontSize: "15px", background: "#64001d" }} onClick={() => handlecrudequipos()}>
-                                Gestionar Equipo
-                            </Button>
-                            <Button variant="contained" style={{ margin: "10px", fontSize: "15px", background: "#64001d" }} onClick={() => handlecrudproyects()}>
-                                Gestionar Proyectos
-                            </Button>
-                            <Button variant="contained" style={{ margin: "10px", fontSize: "15px", background: "#64001d" }}  onClick={() => handlecruddocuments()}>
-                                subir Documentos
-                            </Button>
-                           
-                        </Box>
+
                     </Box>
 
                 </Grid>
@@ -97,7 +89,7 @@ function App() {
                             Misión:
                         </Typography>
                         <Typography variant="body1" paragraph align="left">
-                        {labData.mision}
+                            {labData.mision}
                         </Typography>
 
                         {/* Información para la visión */}
@@ -105,18 +97,35 @@ function App() {
                             Visión:
                         </Typography>
                         <Typography variant="body1" paragraph align="left">
-                        {labData.vision}
+                            {labData.vision}
                         </Typography>
-                        
+
                         {/* Información para la visión */}
                         <Typography variant="h6" gutterBottom align="left">
                             Historia:
                         </Typography>
                         <Typography variant="body1" paragraph align="left">
-                        {labData.historia}
+                            {labData.historia}
                         </Typography>
 
                     </Paper>
+                </Grid>
+                <Grid item xs={12} sm={12} md={6} lg={6}>
+                    <Box display="flex" justifyContent="center" alignItems="center">
+                        <Button variant="contained" color="primary" style={{ margin: "10px", fontSize: "15px", background: "#64001d" }} onClick={() => handlecrudequipos()}>
+                            Gestión Equipo
+                        </Button>
+                        <Button variant="contained" style={{ margin: "10px", fontSize: "15px", background: "#64001d" }} onClick={() => handlecrudproyects()}>
+                            Gestión Proyectos
+                        </Button>
+                        <Button variant="contained" style={{ margin: "10px", fontSize: "15px", background: "#64001d" }} onClick={() => handlecrudoposted()}>
+                            Gestión de Publicaciones
+                        </Button>
+                        <Button variant="contained" style={{ margin: "10px", fontSize: "15px", background: "#64001d" }} onClick={() => handlecrudservice()}>
+                            Gestión Servicios
+                        </Button>
+
+                    </Box>
                 </Grid>
             </Grid>
         </Container>
