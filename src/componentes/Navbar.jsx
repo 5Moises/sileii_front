@@ -6,7 +6,7 @@ import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import Icon from '../assets/imagenes/logo.jpg';
+import Icon from '../assets/imagenes/login_back.png';
 import { styled } from '@mui/material/styles';
 import HomeIcon from '@mui/icons-material/Home';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -54,7 +54,7 @@ const pageIcons = {
   'Solicitud de Mantenimiento': <EngineeringIcon />,
   'Asignar Director': <SchoolIcon />,
   'Institutos': <AccountBalanceIcon />,
-  'Registrar Comite':<GroupAddIcon />,
+  'Registrar Comite': <GroupAddIcon />,
 };
 const settings = ['Perfil', 'Cerrar Sesión'];
 const pageRoutes = {
@@ -79,11 +79,11 @@ const pageRoutes = {
 
 const styles = {
   barra: {
-    backgroundColor: '#64001D',
+    backgroundColor: '#FFFFFF',
     color: '#FFFFFF',
-    position:'relative',
-   
-    width:'100%'
+    position: 'relative',
+
+    width: '100%'
   },
   enlace: {
     marginLeft: '8px',
@@ -231,11 +231,43 @@ function ResponsiveAppBar() {
     setMobileOpen(!mobileOpen);
   };
   const appBarHeight = 64; // Ajusta este valor según la altura de tu AppBar
+  let primeraLetra = users.nombreusuario ? users.nombreusuario[0].toUpperCase() : '';
 
   const drawer = (
-    <SidebarContainer>
-      <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Avatar>M</Avatar>
+    <SidebarContainer >
+      <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
+        <Box sx={{ flexGrow: 0, paddingLeft: '10px' }}>
+          <Tooltip title="Open settings">
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <Avatar>{primeraLetra}</Avatar>
+            </IconButton>
+          </Tooltip>
+          <Menu
+            sx={{
+              mt: '45px',
+              right: 0, // Alinea el menú en el lado derecho
+            }}
+            id="menu-appbar"
+            anchorEl={anchorElUser}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorElUser)}
+            onClose={handleCloseUserMenu}
+          >
+            {settings.map((setting) => (
+              <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
+                <Typography textAlign="center">{setting}</Typography>
+              </MenuItem>
+            ))}
+          </Menu>
+        </Box>
         <Typography variant="body2" style={{ marginTop: '8px' }}>
           {users.nombreusuario}
         </Typography>
@@ -284,7 +316,7 @@ function ResponsiveAppBar() {
 
   return (
     // Estructura de la barra de navegación
-    <Box sx={{ display: 'flex', flexDirection: 'column' , padding:'0px 0px 0px 0px',}}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', padding: '0px 0px 0px 0px', }}>
 
       <AppBar sx={{ ...styles.barra, zIndex: (theme) => theme.zIndex.drawer + 1 }}>
 
@@ -308,9 +340,7 @@ function ResponsiveAppBar() {
               size="large"
               aria-label="open drawer"
               onClick={handleDrawerToggle}
-              sx={{
-                color: 'inherit',
-              }}
+              style={{ color: 'black', }}
             >
               <MenuIcon />
             </IconButton>
@@ -334,7 +364,7 @@ function ResponsiveAppBar() {
             </Typography>
 
             <Link to="/Inicio">
-              <img src={Icon} alt="" style={{ width: "160px", heigth: "auto", marginRight: "10px" }} />
+              <img src={Icon} alt="" style={{ width: "60px", heigth: "auto", marginRight: "10px", padding: '10%' }} />
             </Link>
 
 
@@ -348,7 +378,7 @@ function ResponsiveAppBar() {
               component="a"
               sx={{
                 fontFamily: 'monospace',
-                color: 'inherit',
+                color: 'black',
                 textDecoration: 'none',
               }}
             >
@@ -358,7 +388,7 @@ function ResponsiveAppBar() {
             <Box sx={{ flexGrow: 0, paddingLeft: '10px' }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="" />
+                  <Avatar>{primeraLetra}</Avatar>
                 </IconButton>
               </Tooltip>
               <Menu

@@ -1,6 +1,6 @@
 import { Container, Grid, Paper, Typography, Box, Button } from "@mui/material";
 import LabForm from "../componentes/LabForm";
-import Escudo from "../assets/imagenes/login_back.jpg";
+import Escudo from "../assets/imagenes/login_back.png";
 import { useLocation, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
@@ -57,7 +57,7 @@ function App() {
                         <img
                             src={Escudo}
                             alt="Logo-Sileii"
-                            style={{ maxWidth: "100%", maxHeight: "100%", width: "auto" }}
+                            style={{ width: "50%" ,heigth: "auto" }}
                         />
                     </Box>
 

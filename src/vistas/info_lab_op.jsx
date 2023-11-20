@@ -1,7 +1,7 @@
 import { Container, Grid, Paper, Typography, Box, Button } from "@mui/material";
 import LabForm from "../componentes/LabForm";
 import React, { useRef } from 'react';
-import Escudo from "../assets/imagenes/login_back.jpg";
+import Escudo from "../assets/imagenes/login_back.png";
 import { useLocation } from 'react-router-dom';
 
 import { useNavigate } from 'react-router-dom';

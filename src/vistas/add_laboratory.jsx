@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 
 import Laboratory_Form from "../componentes/LaboratoryForm";
 
-import Escudo from "../assets/imagenes/login_back.jpg";
+import Escudo from "../assets/imagenes/login_back.png";
 /* import Navigation from "../componentes/Nav"; */
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 function Add_Laboratory() {
@@ -84,7 +84,7 @@ function Add_Laboratory() {
               <img
                 src={Escudo}
                 alt="Logo-Sileii"
-                style={{ maxWidth: "100%", maxHeight: "100%", width: "auto" }}
+                style={{ width: "50%" ,heigth: "auto" }}
               />
             </Box>
           </Grid>

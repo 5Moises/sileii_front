@@ -2,7 +2,7 @@ import { Container, Grid, Paper, Typography, Box } from "@mui/material";
 import React, { useState, useEffect } from 'react';
 
 import ManagementForm from "../componentes/management_form";
-import Escudo from "../assets/imagenes/login_back.jpg";
+import Escudo from "../assets/imagenes/login_back.png";
 /* import Navigation from "../componentes/Nav"; */
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
@@ -88,7 +88,7 @@ function Update_management() {
             <img
               src={Escudo}
               alt="Logo-Sileii"
-              style={{ maxWidth: "100%", maxHeight: "100%", width: "auto" }}
+              style={{ width: "50%" ,heigth: "auto" }}
             />
           </Box>
         </Grid>

@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE_URL } from '../js/config';
 import { Box, Grid, Card, CardContent, CardMedia, Typography, IconButton } from '@mui/material';
-import Escudo from "../assets/imagenes/login_back.jpg";
+import Escudo from "../assets/imagenes/login_back.png";
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 function ListaLab() {

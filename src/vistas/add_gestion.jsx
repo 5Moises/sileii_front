@@ -1,6 +1,6 @@
 import { Container, Grid, Paper, Typography, Box } from "@mui/material";
 import LabForm from "../componentes/LabForm";
-import Escudo from "../assets/imagenes/login_back.jpg";
+import Escudo from "../assets/imagenes/login_back.png";
 
 function App() {
   return (

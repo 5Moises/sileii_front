@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import theme from '../js/temaConfig';
 import { Container, Grid, Box, Paper, Typography, Button } from '@mui/material';
-import Escudo from "../assets/imagenes/login_back.jpg";
+import Escudo from "../assets/imagenes/login_back.png";
 import ico1 from "../assets/imagenes/ico_1.png";
 import ico2 from "../assets/imagenes/ico_2.ico";
 

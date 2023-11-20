@@ -33,7 +33,7 @@ function NavbarLogin({ children }) {
         <AppBar position="fixed">
           <Toolbar>
             <Typography variant="h6" noWrap component="div">
-              UNSA
+              SILEII
             </Typography>
           </Toolbar>
         </AppBar>

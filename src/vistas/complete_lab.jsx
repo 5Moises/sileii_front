@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom'; // Importar useLocation
 import axios from 'axios'; // Asumiendo que estás usando axios para las peticiones HTTP
-import Escudo from "../assets/imagenes/login_back.jpg";
+import Escudo from "../assets/imagenes/login_back.png";
 import { Container, Grid, Paper, Typography, Box, TextField, Button } from "@mui/material";
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';

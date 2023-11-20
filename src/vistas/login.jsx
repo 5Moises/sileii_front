@@ -6,7 +6,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../js/config';
 
-import logo from "../assets/imagenes/login_back.jpg";
+import logo from "../assets/imagenes/login_back.png";
 
 const customTheme = createTheme({
   palette: {
@@ -58,10 +58,10 @@ function Login() {
 
   return (
     <Container maxWidth="md">
-      <Grid container justifyContent="center" alignItems="flex-start" style={{ minHeight: '100vh', marginTop: '100px' }}>
-        <Grid item xs={12} sm={12} md={8} lg={6} style={{ marginTop: '70px' }}>
-          <ThemeProvider theme={customTheme}>
-            <Paper elevation={3} style={{ padding: '20px' }}>
+      <Grid container alignItems="center" style={{ minHeight: '100vh' }}>
+        <Grid item xs={12} sm={6} md={6} lg={6}>
+          
+            <Paper elevation={3}  style={{ padding: '20px', margin: 'auto', display: 'flex', flexDirection: 'column' }}>
               <Typography variant="h4" align="center" gutterBottom style={{ color: '#64001D', fontWeight: 'bold' }}>
                 Iniciar Sesión
               </Typography>
@@ -108,11 +108,11 @@ function Login() {
                 </Alert>
               )}
             </Paper>
-          </ThemeProvider>
+          
         </Grid>
-        <Grid item xs={12} sm={8} md={6} lg={6}>
-          <Box display="flex" justifyContent="center" alignItems="center" height="100%">
-            <img src={logo} alt="Imagen de fondo" style={{ maxWidth: '80%', marginTop: '40%', maxHeight: '100%', width: 'auto' }} />
+        <Grid item xs={12} sm={6} md={6} lg={6}>
+          <Box display="flex" justifyContent="center" height="100%">
+            <img src={logo} alt="Imagen de fondo" style={{ maxWidth: '80%', maxHeight: '100%', width: 'auto' }} />
           </Box>
         </Grid>
       </Grid>

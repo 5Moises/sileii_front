@@ -1,5 +1,5 @@
 import { Container, Grid, Paper, Typography, Box } from "@mui/material";
-import Escudo from "../assets/imagenes/login_back.jpg";
+import Escudo from "../assets/imagenes/login_back.png";
 import DocumentForm from "../componentes/DocumentForm";
 
 
@@ -54,7 +54,7 @@ function add_users() {
             <img
               src={Escudo}
               alt="Logo-Sileii"
-              style={{ maxWidth: "100%", maxHeight: "100%", width: "auto" }}
+              style={{ width: "50%" ,heigth: "auto" }}
             />
           </Box>
         </Grid>
