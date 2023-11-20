@@ -115,7 +115,7 @@ function App() {
                 {/* Columna Izquierda (Imagen y Botones) */}
                 <Grid item xs={12} sm={12} md={6} lg={6} style={{ paddingLeft: "10%" }} >
                     <Box display="flex" justifyContent="space-between" alignItems="center" flexDirection="column" height="100%">
-                        <img src={Escudo} alt="Logo-Sileii" style={{ maxWidth: "100%", height: "auto" }} />
+                        <img src={Escudo} alt="Logo-Sileii" style={{ maxWidth: "80%", height: "auto" }} />
                     </Box>
                 </Grid>
 
