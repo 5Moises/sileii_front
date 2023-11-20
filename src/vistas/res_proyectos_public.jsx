@@ -80,7 +80,7 @@ function ListaLab() {
                             <CardMedia
                                 component="img"
                                 height="140"
-                                image={Escudo}
+                                src={`${equipment.image_url}`}
                                 alt={`${equipment.nombre_proyecto}`}
                             />
                             <CardContent sx={{ textAlign: 'center' }}>
