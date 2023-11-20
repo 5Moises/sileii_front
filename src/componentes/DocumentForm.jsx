@@ -55,7 +55,6 @@ function DocumentForm() {
       let response;
       
       if (labData.documento_id) {
-        alert(labData.documento_id);
         const apiUrl = `${API_BASE_URL}coordinador/documentos/update/${labData.documento_id}`;
         // Si labData.nombre_documento tiene datos, realiza una solicitud PUT
         response = await axios.post(apiUrl, formData, config);

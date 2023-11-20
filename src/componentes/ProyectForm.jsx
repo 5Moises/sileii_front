@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import axios from 'axios';
-import { Grid, TextField, Button, InputAdornment, IconButton } from '@mui/material';
+import { Grid, TextField, Button, InputAdornment, IconButton, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../js/config';
@@ -8,7 +8,7 @@ import { API_BASE_URL } from '../js/config';
 function ProyectForm() {
   const location = useLocation();
   const labData = location.state?.userToEdit;
-  const [fileName, setFileName] = useState(labData.nombre_documento || "");  // Inicializa fileName con el valor de labData.nombre_documento
+  const [fileName, setFileName] = useState(labData?.nombre_documento || "");  // Inicializa fileName con el valor de labData.nombre_documento
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef();
   const [nombreProyecto, setNombreProyecto] = useState(labData?.nombre_proyecto || "");
@@ -17,6 +17,7 @@ function ProyectForm() {
   const [doi, setDOI] = useState(labData?.doi || "");
   const [resumen, setResumen] = useState(labData?.resumen || "");
   const [iba, setIBA] = useState(labData?.iba || "");
+  const [etapa, setetapa] = useState(labData?.etapa || "");
 
   const navigate = useNavigate();  // Hook para la navegación
 
@@ -66,6 +67,8 @@ function ProyectForm() {
       formData.append("resumen", resumen);
       formData.append("iba", iba);
       formData.append("imagen_referencial", file);
+      formData.append("etapa", etapa);
+
 
       if (!labData || labData.registro_id === undefined) {
         console.error('registro_id no está definido.');
@@ -114,7 +117,7 @@ function ProyectForm() {
     label: {
       color: '#555',
     },
-   
+
     button: {
       backgroundColor: '#64001D',
       '&:hover': {
@@ -129,7 +132,7 @@ function ProyectForm() {
     inputWithIcon: {
       paddingRight: 0
     },
-   
+
   };
 
   const triggerFileSelect = () => {
@@ -251,6 +254,26 @@ function ProyectForm() {
             value={iba}
             onChange={handleIBAChange}
           />
+        </Grid>
+        <Grid item xs={6} sx={{ marginTop: '8px', }}>
+          <FormControl variant="outlined" fullWidth>
+            <InputLabel id="demo-simple-select-label">
+              Etapa
+            </InputLabel>
+            <Select
+              name="Etapa"
+              label="Etapa"
+              size='small'
+              value={etapa}
+              margin="dense"
+              labelId="demo-simple-select-label"
+              onChange={(e) => setetapa(e.target.value)}
+            >
+              <MenuItem value={"Inicio"}>Inicio</MenuItem>
+              <MenuItem value={"En Proceso"}>En Proceso</MenuItem>
+              <MenuItem value={"Finalizado"}>Finalizado</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
       </Grid>
       <br />

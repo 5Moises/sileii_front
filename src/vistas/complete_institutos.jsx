@@ -12,31 +12,53 @@ const MyFormPage = () => {
     const location = useLocation(); // Accede a la ubicación actual en la navegación
     const labToEdit = location.state?.userToEdit || {};
     const fileInputRef = useRef();
-    const [fileName, setFileName] = useState(labToEdit?.nombre_mision || "");  // Inicializa fileName con el valor de labToEdit.nombre_mision
+    const [fileName, setFileName] = useState(labToEdit?.nombre_imagen || "");  // Inicializa fileName con el valor de labToEdit.nombre_mision
     const [selectedFile, setSelectedFile] = useState(null);
-
-
     const [instituto_id, SetInstituto_id] = useState(parseInt(labToEdit?.instituto_id, 10));
-    const [mision, setmision] = useState(labToEdit.mision || '');
-    const [vision, setvision] = useState(labToEdit.vision || '');
-    const [historia, sethistoria] = useState(labToEdit.historia || '');
-    const [apellidoMaterno, setApellidoMaterno] = useState(labToEdit.apellido_materno || '');
-    const [, setDireccionUsuario] = useState(labToEdit.direccion); // Valor fijo 'UNSA'
-    const [telefonoUsuario, setTelefonoUsuario] = useState(labToEdit.telefono || '');
-    const [email, setEmail] = useState(labToEdit.correo || '');
-    const [password, setPassword] = useState(labToEdit.password || '');
-    const [idRol, setIdRol] = useState(parseInt(labToEdit.rol_id || 5, 10));
-    const [estado, setEstado] = useState(true);
-    const [categoria, setCategoria] = useState(labToEdit.categoria || "Principal"); // Supongamos que el valor predeterminado es 5
-    const [regimen, setRegimen] = useState(labToEdit.regimen || "Tiempo Parcial"); // Supongamos que el valor predeterminado es 5
-    const [selectedRoles, setSelectedRoles] = useState([]);
+    const [mision, setmision] = useState(labToEdit?.mision || '');
+    const [vision, setvision] = useState(labToEdit?.vision || '');
+    const [historia, sethistoria] = useState(labToEdit?.historia || '');
+    const [ubicacion, setubicacion] = useState(labToEdit?.ubicacion || '');
+    const [contacto, setContacto] = useState(labToEdit?.contacto || '');
+    const [comite_directivo, setcomite_directivo] = useState(labToEdit?.comite_directivo || '');
+    const [isLoading, setIsLoading] = useState(true);
 
     const [error, setError] = useState(false);
 
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                console.error('Token de autenticación no encontrado en el localStorage.');
+                return;
+            }
+
+            try {
+                const response = await axios.get(`${API_BASE_URL}usuarios`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json',
+                    },
+                });
+
+                if (response.status === 200) {
+                    const updatedUsers = response.data.usuarios.filter(user => user.rol_id === 5 && user.estado === true);
+                    setcomite_directivo(updatedUsers);
+                    setIsLoading(false);
+                } else {
+                    console.error('Error en la respuesta de la API:', response.status);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        fetchUsers();
+    }, []);
     const handleCancel = () => {
         navigate(-1);
     };
-
     const styles = {
         label: {
             color: '#555',
@@ -69,7 +91,7 @@ const MyFormPage = () => {
         setFileName(file.name);
     };
     const handleSave = async () => {
-        if (!mision || !vision || !historia || !apellidoMaterno || !direccionUsuario || !telefonoUsuario || !email || !password || !idRol || !categoria || !regimen) {
+        if (!mision || !vision || !instituto_id || !historia || !ubicacion || !contacto || !comite_directivo) {
             setError(true);
             setDialogMessage("Hay campos obligatorios que debe completar.");
             setDialogOpen(true);
@@ -78,33 +100,31 @@ const MyFormPage = () => {
 
         setError(false);
         const token = localStorage.getItem('token');
-        let vision = vision;
-        let apellidopa = historia;
-        let apellidoma = apellidoMaterno;
-        let direccionusuario = direccionUsuario;
-        let telefonousuario = telefonoUsuario;
-        let idrol = idRol
-        if (idUsuario) {
+
+        const config = {
+            headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
+            },
+        };
+
+        let response;
+        if (instituto_id) {
+            const file = selectedFile;
+            const formData = new FormData();
+            formData.append("imagen_instituto", file);
+            formData.append("nombre_documento", fileName);
+            formData.append("mision", mision);
+            formData.append("vision", vision);
+            formData.append("historia", historia);
+            formData.append("contacto", contacto);
+            formData.append("comite_directivo", comite_directivo);
             try {
-                const response = await axios.put(`${API_BASE_URL}comiteDirectivo/${idUsuario}`, {
-                    mision,
-                    vision,
-                    apellidopa,
-                    apellidoma,
-                    direccionusuario,
-                    telefonousuario,
-                    email,
-                    password,
-                    idrol,
-                    estado,
-                    categoria,
-                    regimen
-                }, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/json',
-                    }
-                });
+                const apiUrl = `${API_BASE_URL}directores/completar/${instituto_id}`;
+                // Si labData.nombre_documento tiene datos, realiza una solicitud PUT
+                response = await axios.put(apiUrl, formData, config);
+
                 if (response.status >= 200 && response.status <= 300) {
                     setDialogMessage("Petición exitosa");
                     setDialogOpen(true);
@@ -119,42 +139,6 @@ const MyFormPage = () => {
                 // Puedes manejar errores específicos aquí si es necesario.
             }
         }
-        else {
-            try {
-                const response = await axios.post(`${API_BASE_URL}comiteDirectivo`, {
-                    mision,
-                    vision,
-                    apellidopa,
-                    apellidoma,
-                    direccionusuario,
-                    telefonousuario,
-                    email,
-                    password,
-                    idrol,
-                    estado,
-                    categoria,
-                    regimen
-                }, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/json',
-                    }
-                });
-                if (response.status >= 200 && response.status <= 300) {
-                    setDialogMessage("Petición exitosa");
-                    setDialogOpen(true);
-
-                }
-
-
-                // Aquí puedes añadir lógica adicional para manejar la respuesta del servidor, como navegación o mensajes de éxito/error.
-            } catch (error) {
-                setDialogMessage("Error al enviar el formulario:", error);
-                setDialogOpen(true);
-                // Puedes manejar errores específicos aquí si es necesario.
-            }
-        }
-
     };
     const handleCloseDialog = () => {
         if (dialogMessage === 'Petición exitosa') {
@@ -168,11 +152,6 @@ const MyFormPage = () => {
     const handleFileNameChange = (e) => {
         setFileName(e.target.value);
     };
-
-    // Actualiza la función de manejo de cambios para manejar un array de valores
-
-
-    // Datos de ejemplo para los roles del comité directivo
     const roles = [
         { id: 1, name: 'Presidente' },
         { id: 2, name: 'Vicepresidente' },
@@ -180,12 +159,14 @@ const MyFormPage = () => {
         { id: 4, name: 'Tesorero' },
         // ... otros roles
     ];
-
     const handleChange = (event) => {
         // Set the selected roles to the new value
-        setSelectedRoles(event.target.value);
+        setcomite_directivo(event.target.value);
     };
 
+    if (isLoading) {
+        return <div>Cargando...</div>;
+    }
     return (
         <Container maxWidth="md" sx={{ py: 8 }}> {/* Padding top and bottom */}
             <Paper elevation={3} sx={{ p: { xs: 2, md: 4 } }}> {/* Responsive padding */}
@@ -198,7 +179,7 @@ const MyFormPage = () => {
 
                     <Grid item xs={12}>
                         <Typography variant="h5" component="h2" textAlign="center">
-                            Completar Información Instituto
+                            Completar Información Instituto <strong>{labToEdit.nombre}</strong>
                         </Typography>
                     </Grid>
 
@@ -210,13 +191,25 @@ const MyFormPage = () => {
                                 shrink: true,
                             }}
                             fullWidth
+                            value={mision}
+                            onChange={(e) => setmision(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Vision"
+                            type="text"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            fullWidth
                             value={vision}
                             onChange={(e) => setvision(e.target.value)}
                         />
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            label="Vision"
+                            label="Reseña Historica"
                             type="text"
                             InputLabelProps={{
                                 shrink: true,
@@ -228,53 +221,50 @@ const MyFormPage = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            label="Reseña Historica"
-                            type="text"
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            fullWidth
-                            value={apellidoMaterno}
-                            onChange={(e) => setApellidoMaterno(e.target.value)}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
                             label="Ubicación"
                             type="text"
                             InputLabelProps={{
                                 shrink: true,
                             }}
                             fullWidth
-                            value={mision}
-                            onChange={(e) => setmision(e.target.value)}
+                            value={ubicacion}
+                            onChange={(e) => setubicacion(e.target.value)}
                         />
                     </Grid>
 
 
-
-
                     <Grid item xs={12}>
+                        {comite_directivo.length > 0 ? (
+                            <FormControl variant="outlined" fullWidth>
+                                <InputLabel id="demo-multiple-checkbox-label">Comité Directivo</InputLabel>
+                                <Select
+                                    labelId="demo-multiple-checkbox-label"
+                                    id="demo-multiple-checkbox"
+                                    multiple
+                                    value={comite_directivo}
+                                    onChange={handleChange}
+                                    renderValue={(selected) =>
+                                        (selected || [])
+                                            .map(id => comite_directivo.find(role => role && role.usuario_id === id))
+                                            .filter(role => role != null && role.usuario_id != null)
+                                            .map(role => role.nombre)
+                                            .join(', ')
+                                    }
+                                    label="Comité Directivo"
+                                >
+                                    {comite_directivo.filter(role => role.nombre).map((role) => (
+                                        <MenuItem key={role.usuario_id} value={role.usuario_id}>
+                                            <Checkbox checked={comite_directivo.indexOf(role.usuario_id) > -1} />
+                                            <ListItemText primary={role.nombre} />
+                                        </MenuItem>
+                                    ))}
 
-                        <FormControl variant="outlined" fullWidth>
-                            <InputLabel id="demo-multiple-checkbox-label">Comité Directivo</InputLabel>
-                            <Select
-                                labelId="demo-multiple-checkbox-label"
-                                id="demo-multiple-checkbox"
-                                multiple
-                                value={selectedRoles}
-                                onChange={handleChange}
-                                renderValue={(selected) => selected.map(id => roles.find(role => role.id === id).name).join(', ')}
-                                label="Comité Directivo"
-                            >
-                                {roles.map((role) => (
-                                    <MenuItem key={role.id} value={role.id}>
-                                        <Checkbox checked={selectedRoles.indexOf(role.id) > -1} />
-                                        <ListItemText primary={role.name} />
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
+
+                                </Select>
+                            </FormControl>
+                        ) : (
+                            <div>Cargando opciones...</div>
+                        )}
 
                     </Grid>
 
@@ -287,8 +277,8 @@ const MyFormPage = () => {
                                 shrink: true,
                             }}
                             fullWidth
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={contacto}
+                            onChange={(e) => setContacto(e.target.value)}
                         />
                     </Grid>
 

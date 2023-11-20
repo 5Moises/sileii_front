@@ -60,6 +60,8 @@ import Res_users_dire from "./vistas/res_users_director";
 import Add_users_dire from "./vistas/add_comite_director";
 
 import Complete_inti from "./vistas/complete_institutos";
+import Add_service from "./vistas/add_service";
+import Add_posted from "./vistas/add_posted";
 
 import Info_insti from "./vistas/info_intituto";
 
@@ -104,7 +106,10 @@ function App() {
         <Route path="/ManageDocuments" element={<Layout><ManageDocuments /></Layout>} />
         <Route path="/AddDocument" element={<Layout><AddDocument /></Layout>} />
         <Route path="/UpdateDocument" element={<Layout><UpdateDocument /></Layout>} />
+        <Route path="/op_list" element={<Layout><List_op /></Layout>} />
+        <Route path="/res_equipment" element={<Layout><Equipment /></Layout>} />
 
+        
         {/* Otras Rutas de la Aplicación */}
         <Route path="/res_area" element={<Layout><Area /></Layout>} />
         <Route path="/res_discipline" element={<Layout><Disciplina /></Layout>} />
@@ -130,6 +135,9 @@ function App() {
         <Route path="/add_insti" element={<Layout><AddInsti /></Layout>} />
         <Route path="/gestion_resp_insti" element={<Layout><TbInsti /></Layout>} />
         <Route path="/view_director" element={<Layout><View_director_1 /></Layout>} />
+        <Route path="/add_service" element={<Layout><Add_service /></Layout>} />
+        <Route path="/add_posted" element={<Layout><Add_posted /></Layout>} />
+        
 
         {/* Ruta para manejar 404 - No encontrado */}
         <Route path="*" element={<NotFound />} />
