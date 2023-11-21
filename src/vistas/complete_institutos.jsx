@@ -28,7 +28,7 @@ const MyFormPage = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             const token = localStorage.getItem('token');
-
+            console.log(labToEdit?.comite_directivo)
             if (!token) {
                 console.error('Token de autenticación no encontrado en el localStorage.');
                 return;
@@ -119,7 +119,10 @@ const MyFormPage = () => {
             formData.append("vision", vision);
             formData.append("historia", historia);
             formData.append("contacto", contacto);
+            formData.append("ubicacion", ubicacion);            
             formData.append("comite_directivo", comite_directivo);
+
+            
             try {
                 const apiUrl = `${API_BASE_URL}directores/completar/${instituto_id}`;
                 // Si labData.nombre_documento tiene datos, realiza una solicitud PUT

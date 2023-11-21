@@ -100,10 +100,10 @@ function Formulario({ labData }) {
 
   useEffect(() => {
     const fetchOptions = async () => {
-      const disciplinasData = await fetchAPI('/disciplinas');
-      const responsablesData = await fetchAPI('/usuarios/coordinadores');
-      const laboratoriosData = await fetchAPI('/laboratorios');
-      const areasData = await fetchAPI('/areas');
+      const disciplinasData = await fetchAPI('disciplinas');
+      const responsablesData = await fetchAPI('usuarios/coordinadores');
+      const laboratoriosData = await fetchAPI('laboratorios');
+      const areasData = await fetchAPI('areas');
 
       if (disciplinasData && disciplinasData.disciplinas) {
         const transformedData = disciplinasData.disciplinas.map(disciplina => ({
@@ -165,10 +165,10 @@ function Formulario({ labData }) {
     let response;
     if (registroId) {
       // Actualizar el registro existente
-      response = await fetchAPI(`/registroLaboratorio/${registroId}`, 'PUT', data);
+      response = await fetchAPI(`registroLaboratorio/${registroId}`, 'PUT', data);
     } else {
       // Crear un nuevo registro
-      response = await fetchAPI('/registroLaboratorio', 'POST', data);
+      response = await fetchAPI('registroLaboratorio', 'POST', data);
     }
     if (response) {
       navigate('/gestion_resp_lab');

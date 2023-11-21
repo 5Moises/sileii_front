@@ -102,7 +102,7 @@ function Formulario({ labData }) {
 
   useEffect(() => {
     const fetchOptions = async () => {
-      const responsablesData = await fetchAPI('/directores');
+      const responsablesData = await fetchAPI('directores');
 
       if (responsablesData && responsablesData.directores) {
         const transformedResponsables = responsablesData.directores.map(directores => ({
@@ -148,10 +148,10 @@ function Formulario({ labData }) {
     let response;
     if (registroId) {
       // Actualizar el registro existente
-      response = await fetchAPI(`/registroLaboratorio/${registroId}`, 'PUT', data);
+      response = await fetchAPI(`registroLaboratorio/${registroId}`, 'PUT', data);
     } else {
       // Crear un nuevo registro
-      response = await fetchAPI('/institutos', 'POST', data);
+      response = await fetchAPI('institutos', 'POST', data);
     }
     if (response) {
       navigate('/gestion_resp_insti');
