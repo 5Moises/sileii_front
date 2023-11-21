@@ -92,7 +92,7 @@ function ListaLab() {
                                 <TableRow key={index}>
                                     <TableCell sx={{ textAlign: 'center' }}>{user.proyecto_id}</TableCell>
                                     <TableCell sx={{ textAlign: 'center' }}>{user.nombre_proyecto}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>EN PROCESO</TableCell>
+                                    <TableCell sx={{ textAlign: 'center' }}>{user.etapa}</TableCell>
                                     <TableCell sx={{ textAlign: 'center' }}>
                                         <IconButton
                                             sx={{ backgroundColor: '#64001D', color: '#FFFFFF' }}
