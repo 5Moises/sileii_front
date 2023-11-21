@@ -1,22 +1,21 @@
+
 import React, { useState, useEffect } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import {
-    Container, Paper, Typography, TextField, Table, TableContainer,
-    TableHead, TableBody, TableRow, TableCell, Button, Grid, IconButton
-} from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE_URL } from '../js/config';
+import { Box, Grid, Card, CardContent, CardMedia, Typography, IconButton } from '@mui/material';
+import Escudo from "../assets/imagenes/login_back.png";
 
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 function ListaLab() {
     const navigate = useNavigate();
     //const [linesInves, setLinesInves] = useState([]);
-
     const location = useLocation();
     const labData = location.state?.userToEdit;
 
-    const [linesInves, setLinesInves] = useState([]);
 
+    const [linesInves, setLinesInves] = useState([]);
 
     useEffect(() => {
         const fetchLab = async () => {
@@ -44,10 +43,6 @@ function ListaLab() {
         fetchLab();
     }, [labData.registro_id]); // Asegúrate de incluir todas las dependencias necesarias aquí
 
-
-
-
-
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const rowsPerPage = 5;
@@ -63,70 +58,42 @@ function ListaLab() {
         currentPage * rowsPerPage + rowsPerPage
     );
     const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
+
+   
+    const handleCancel = () => {
+        navigate(-1);
+    };
+
     return (
-        <Container maxWidth="xl" sx={{ minHeight: '80vh', paddingTop: '5%', paddingBottom: '5%' }}>
-            <Paper elevation={3} sx={{ padding: 3, width: '100%' }}>
-                <Typography variant="h4" align="left" gutterBottom sx={{ color: '#64001D', fontWeight: 'bold' }}>
-                    Equipos Especializados
+        <Box sx={{ flexGrow: 1, p: 3 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <IconButton aria-label="back" onClick={handleCancel}>
+                    <ArrowBackIcon />
+                </IconButton>
+                <Typography variant="h5" component="div" sx={{ ml: 2 }}>
+                    Equipos de Laboratorio
                 </Typography>
-
-                <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={10}>
-                        <TextField
-                            label="Buscar"
-                            variant="outlined"
-                            InputLabelProps={{ style: { color: '#64001D', width: '100%' } }}
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
+            </Box>
+            <Grid container spacing={2}>
+                {paginatedUsers.map((project, index) => (
+                    <Grid item xs={12} sm={6} md={4} lg={3} key={index} onClick={() => handleInfo(project)}>
+                        <Card>
+                            <CardMedia
+                                component="img"
+                                height="140"
+                                src={`${project.image_url}`}
+                                alt={`${project.nombre}`}
+                            />
+                            <CardContent sx={{ textAlign: 'center' }}>
+                                <Typography gutterBottom variant="h6" component="div">
+                                    {project.nombre}
+                                </Typography>
+                            </CardContent>
+                        </Card>
                     </Grid>
-                </Grid>
-
-                <TableContainer sx={{ maxHeight: '50vh', marginTop: 2 }}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '110%' }}>ID</TableCell>
-                                <TableCell sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '110%' }}>Nombre</TableCell>
-                                <TableCell sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '110%' }}>Documento</TableCell>
-                                <TableCell sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '110%' }}>Actividad</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {paginatedUsers.map((user, index) => (
-                                <TableRow key={index}>
-                                    <TableCell sx={{ textAlign: 'center' }}>{user.equipo_id}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>{user.nombre}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>{user.image_url}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>
-                                        <IconButton
-                                            sx={{ backgroundColor: '#64001D', color: '#FFFFFF' }}
-                                            onClick={() => handleInfo(user)}
-                                        >
-                                            <VisibilityIcon />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-
-                <Grid container spacing={2} justifyContent="center" sx={{ marginTop: 2 }}>
-                    {[...Array(totalPages)].map((_, index) => (
-                        <Grid item key={index}>
-                            <Button
-                                variant={currentPage === index ? 'contained' : 'outlined'}
-                                onClick={() => setCurrentPage(index)}
-                                sx={{ mx: 0.5 }}
-                            >
-                                {index + 1}
-                            </Button>
-                        </Grid>
-                    ))}
-                </Grid>
-            </Paper>
-        </Container>
+                ))}
+            </Grid>
+        </Box>
     );
 }
 

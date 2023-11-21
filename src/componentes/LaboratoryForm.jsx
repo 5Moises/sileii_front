@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../js/config';
 
 
 const styles = {
@@ -149,7 +150,7 @@ function Laboratory_Form() {
       }      
       console.log("entra sin erroes")      
         axios
-          .post(`https://reliably-busy-polecat.ngrok-free.app/api/laboratorios`, formData, {
+          .post(`${API_BASE_URL}laboratorios`, formData, {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json',

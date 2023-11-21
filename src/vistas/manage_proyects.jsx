@@ -11,6 +11,19 @@ import { API_BASE_URL } from '../js/config';
 function G_Proyects() {
   const location = useLocation();
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Inicio':
+        return '#D50C0C'; // Rojo
+      case 'En Proceso':
+        return '#FFA40E'; // Naranja
+      case 'Finalizado':
+        return '#55D50C'; // Verde
+      default:
+        return ''; // Puedes establecer un color predeterminado o dejarlo vacío
+    }
+  };
+
   const [Rol, setLab] = useState([]);
   const [documents, setDocuments] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -114,7 +127,7 @@ function G_Proyects() {
         },
       });
 
-      if (response.status >= 200 && response.status<= 300) {
+      if (response.status >= 200 && response.status <= 300) {
         window.location.reload();
       } else {
         console.error('Error en la respuesta de la API:', response.status);
@@ -188,7 +201,11 @@ function G_Proyects() {
                 <TableRow key={index}>
                   <TableCell sx={{ textAlign: 'center' }}>{document.nombre_proyecto}</TableCell>
                   <TableCell sx={{ textAlign: 'center' }}>{document.nombre_proyecto}</TableCell>
-                  <TableCell sx={{ textAlign: 'center' }}>{document.etapa}</TableCell>
+                  <TableCell sx={{ textAlign: 'center' }}>
+                    <span style={{ backgroundColor: getStatusColor(document.etapa), padding: '5px', borderRadius: '5px' }}>
+                      {document.etapa}
+                    </span>
+                  </TableCell>
                   <TableCell sx={{ textAlign: 'center' }}>
                     <Grid container spacing={1} alignItems="center" justifyContent="center">
                       <Grid item xs={12} sm={4}>

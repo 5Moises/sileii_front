@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TextField, Button, Autocomplete } from '@mui/material';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../js/config';
 
 function Formulario({ labData }) {
   const [responsable, setResponsable] = useState(null);
@@ -17,9 +18,6 @@ function Formulario({ labData }) {
   const [registroId, setRegistroId] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
   const navigate = useNavigate();
-
-  const BASE_URL = 'https://reliably-busy-polecat.ngrok-free.app/api';
-
 
   useEffect(() => {
     if (
@@ -79,7 +77,7 @@ function Formulario({ labData }) {
 
       const config = {
         method: method,
-        url: `${BASE_URL}${endpoint}`,
+        url: `${API_BASE_URL}${endpoint}`,
         headers: headers
       };
 

@@ -114,7 +114,7 @@ const MyFormPage = () => {
             const file = selectedFile;
             const formData = new FormData();
             formData.append("imagen_instituto", file);
-            formData.append("nombre_documento", fileName);
+            formData.append("nombre_imagen", fileName);
             formData.append("mision", mision);
             formData.append("vision", vision);
             formData.append("historia", historia);
@@ -123,7 +123,7 @@ const MyFormPage = () => {
             try {
                 const apiUrl = `${API_BASE_URL}directores/completar/${instituto_id}`;
                 // Si labData.nombre_documento tiene datos, realiza una solicitud PUT
-                response = await axios.put(apiUrl, formData, config);
+                response = await axios.post(apiUrl, formData, config);
 
                 if (response.status >= 200 && response.status <= 300) {
                     setDialogMessage("Petición exitosa");

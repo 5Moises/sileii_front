@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { jsPDF } from 'jspdf';
+import { autoTable } from 'jspdf-autotable';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import Select from '@mui/material/Select';
@@ -20,22 +22,28 @@ function formatDate(dateString) {
     // Extrae solo la fecha (ignorando la hora)
     return dateString.split(' ')[0];
 }
+
 export default function View_Maintenance() {
-    // State para manejar los valores de los campos
     const navigate = useNavigate();
     const location = useLocation();
     const labData = location.state?.userToEdit;
     const [equipmentToSuccess, setEquipmentToSuccess] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
 
+    
+
+
+    const pdfDocument = useRef(null);
 
     const getCurrentDate = () => {
         const today = new Date();
         const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0'); // Los meses en JS van de 0 a 11, por lo que sumamos 1
+        const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     };
+
+
     const [formData, setFormData] = useState({
         nombre: labData.nombre ?? labData.equipo?.nombre,
         marca: labData.marca_modelo ?? labData.equipo?.nombre,
@@ -45,8 +53,10 @@ export default function View_Maintenance() {
         accesorios: labData.accesorio ?? labData.equipo?.accesorio,
         detalle: labData.detalle ?? '',
         oficio: labData.oficio ?? '',
-        estado: labData.estado ?? 'asdas', // 'asdas' seems like a placeholder, replace with actual default value if needed
+        estado: labData.estado ?? 'asdas',
+        etapa: labData.etapa ?? 'INICIO',
     });
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -54,18 +64,18 @@ export default function View_Maintenance() {
             [name]: value
         });
     };
+
     const handleCancel = () => {
-        navigate(-1);  // Esto es equivalente a history.goBack()
-    }
+        navigate(-1);
+    };
+
     const handleSend = () => {
-        // Validando que todos los campos tengan valores
         for (let key in formData) {
             if (!formData[key]) {
                 alert('Todos los campos deben tener valores.');
                 return;
             }
         }
-        // Aquí puedes continuar con la lógica para enviar el formulario
         console.log('Formulario enviado:', formData);
     };
 
@@ -78,17 +88,15 @@ export default function View_Maintenance() {
             fecha_solicitud: formData.fechaSolicitud,
             detalle: formData.detalle,
             oficio: formData.oficio,
-            // Agrega otros campos si es necesario
+            etapa: formData.etapa,
         };
         const token = localStorage.getItem('token');
 
-        // Verifica si se ha almacenado un token en el localStorage
         if (!token) {
             navigate('/');
             console.error('Token de autenticación no encontrado en el localStorage.');
             return;
         }
-
 
         axios
             .post(`${API_BASE_URL}coordinador/solicitud`, requestBody, {
@@ -107,18 +115,62 @@ export default function View_Maintenance() {
             .catch((error) => {
                 console.error("Error:", error);
             });
-
-
     };
+
     const handleCloseDialog = () => {
         setOpenDialog(false);
         setEquipmentToSuccess(null);
     };
+
     const confirm_view = () => {
         navigate(-1);
     };
 
-
+    const exportToPDF = () => {
+        const doc = new jsPDF();
+      
+        // Definir posición y estilo del título
+        const titleX = 105;
+        const titleY = 20;
+        const titleStyle = { align: 'center' };
+      
+        // Añadir título centrado
+        doc.text('Información del mantenimiento', titleX, titleY, titleStyle);
+      
+        // Añadir campos a la izquierda
+        doc.text(`Nombre: ${formData.nombre}`, 20, 40);
+        doc.text(`Marca: ${formData.marca}`, 20, 50);
+        doc.text(`Código Patrimonial: ${formData.codPatrimonial}`, 20, 60);
+        doc.text(`Fecha de adquisición: ${formData.fechaAdquisicion}`, 20, 70);
+      
+        // Crear una tabla para otros campos
+        const tableData = [
+          ['Campo', 'Valor'],
+          ['Fecha de solicitud mant.', formData.fechaSolicitud],
+          ['Accesorios', formData.accesorios],
+          ['Detalle', formData.detalle],
+          ['Oficio', formData.oficio],
+          ['Etapa', formData.etapa],
+        ];
+      
+        // Definir posición y estilo de la tabla
+        const tableX = 20;
+        const tableY = 90;
+        const tableStyles = { fontSize: 12 };
+      
+        // Añadir tabla al PDF utilizando jspdf-autotable
+        doc.autoTable({
+          head: [tableData[0]], // Solo la primera fila es la cabecera
+          body: tableData.slice(1), // El resto es el cuerpo de la tabla
+          startY: tableY,
+          startX: tableX,
+          styles: tableStyles,
+        });
+      
+        // Guardar el documento PDF
+        doc.save('informacion_mantenimiento.pdf');
+      };
+      
 
     return (
         <Container
@@ -161,7 +213,6 @@ export default function View_Maintenance() {
                                 name="fechaAdquisicion"
                                 type="date"
                                 value={formData.fechaAdquisicion}
-
                             />
                             <TextField
                                 fullWidth
@@ -172,8 +223,6 @@ export default function View_Maintenance() {
                                 value={formData.fechaSolicitud}
                                 onChange={handleInputChange}
                                 type="date"
-
-
                             />
                         </Grid>
                         <Grid item xs={12} sm={12} md={6} lg={6}>
@@ -192,7 +241,6 @@ export default function View_Maintenance() {
                                 margin="normal"
                                 name="accesorios"
                                 value={formData.accesorios}
-
                             />
                         </Grid>
                     </Grid>
@@ -218,10 +266,24 @@ export default function View_Maintenance() {
                         onChange={handleInputChange}
                     />
 
-                    <Grid container spacing={2} justifyContent="center" alignItems="center">
-                        <Grid item xs={12} sm={12} md={6} lg={6}>
+                    <FormControl fullWidth variant="outlined" margin="normal">
+                        <InputLabel id="etapa-label">Etapa</InputLabel>
+                        <Select
+                            labelId="etapa-label"
+                            id="etapa"
+                            name="etapa"
+                            label="Etapa"
+                            value={formData.etapa}
+                            onChange={handleInputChange}
+                        >
+                            <MenuItem value="INICIO">INICIO</MenuItem>
+                            <MenuItem value="EN PROCESO">EN PROCESO</MenuItem>
+                            <MenuItem value="FINALIZADO">FINALIZADO</MenuItem>
+                        </Select>
+                    </FormControl>
 
-                        </Grid>
+                    <Grid container spacing={2} justifyContent="center" alignItems="center">
+                        <Grid item xs={12} sm={12} md={6} lg={6}></Grid>
                         <Grid item xs={12} sm={12} md={6} lg={6}>
                             <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
                                 <Button
@@ -230,13 +292,16 @@ export default function View_Maintenance() {
                                     style={{ marginRight: '10px' }}
                                     onClick={handleRegisterClick}
                                 >
-                                    Enviar solicitud
+                                    Guardar
                                 </Button>
-                                <Button variant="outlined" color="secondary"
-                                    onClick={handleCancel}
-                                >
-                                    Cancelar solicitud
+                                <Button variant="outlined" color="secondary" style={{ marginRight: '10px' }} onClick={handleCancel}>
+                                    Cancelar
                                 </Button>
+                                
+                                <Button variant="outlined" color="primary" style={{ marginRight: '10px' }} onClick={exportToPDF}>
+                                    Exportar a PDF
+                                </Button>
+                               
                             </div>
                         </Grid>
                     </Grid>
@@ -246,9 +311,7 @@ export default function View_Maintenance() {
                         aria-labelledby="alert-dialog-title"
                         aria-describedby="alert-dialog-description"
                     >
-                        <DialogTitle id="alert-dialog-title">
-                            {"Confirmación Registro"}
-                        </DialogTitle>
+                        <DialogTitle id="alert-dialog-title">{"Confirmación Registro"}</DialogTitle>
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
                                 SOLICITUD DE MANTENIMIENTO EN ENVIADA CON ÉXITO
@@ -264,5 +327,4 @@ export default function View_Maintenance() {
             </Grid>
         </Container>
     );
-
 }

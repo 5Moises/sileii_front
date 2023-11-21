@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../js/config';
 
 
 const styles = {
@@ -146,7 +147,7 @@ function management_form() {
       }      
       console.log("entra sin erroes")      
         axios
-          .put(`https://reliably-busy-polecat.ngrok-free.app/api/areas/${formData.id}`, formData, {
+          .put(`${API_BASE_URL}areas/${formData.id}`, formData, {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json',
