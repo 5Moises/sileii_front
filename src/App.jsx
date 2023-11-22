@@ -65,7 +65,7 @@ import Add_posted from "./vistas/add_posted";
 
 import Info_insti from "./vistas/info_intituto";
 
-
+ 
 function App() {
   return (
     <div className='fondo'>
