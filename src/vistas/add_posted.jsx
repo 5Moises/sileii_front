@@ -10,13 +10,13 @@ const MyFormPage = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [dialogMessage, setDialogMessage] = useState('');
     const location = useLocation(); // Accede a la ubicación actual en la navegación
-    const labToEdit = location.state?.userToEdit || {};
+    const labToEdit = location.state?.labData || {};
 
 
 
-    const [registro_id, setregistro_id] = useState(parseInt(labToEdit?.registro_id, 10));
-    const [nombre, setnombre] = useState(labToEdit.nombre || '');
-    const [url, setUrl] = useState(labToEdit.url || '');
+    const [idpublicacion, setidpublicacion] = useState(parseInt(labToEdit?.publicacion_id, 10));
+    const [nombre, setnombre] = useState(labToEdit?.titulo || '');
+    const [url, setUrl] = useState(labToEdit?.link || '');
 
 
     const [error, setError] = useState(false);
@@ -27,7 +27,7 @@ const MyFormPage = () => {
 
 
     const handleSave = async () => {
-        if (!nombre || !registro_id || !url) {
+        if (!nombre || !url) {
             setError(true);
             setDialogMessage("Hay campos obligatorios que debe completar.");
             setDialogOpen(true);
@@ -37,10 +37,16 @@ const MyFormPage = () => {
         setError(false);
         const token = localStorage.getItem('token');
 
-        if (registro_id) {
+        if (idpublicacion) {
             try {
-                const response = await axios.put(`${API_BASE_URL}comiteDirectivo/${registro_id}`, {
-
+                let registro_id = labToEdit.registro_id;          
+                let link = url;
+                let titulo = nombre
+                const response = await axios.put(`${API_BASE_URL}coordinador/publicacion/${idpublicacion}`, {
+                   
+                    titulo,
+                    link,
+                    registro_id
                 }, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -62,20 +68,14 @@ const MyFormPage = () => {
             }
         }
         else {
+            let registro_id = labToEdit.laboratorio_id;          
+            let link = url;
+            let titulo = nombre
             try {
-                const response = await axios.post(`${API_BASE_URL}comiteDirectivo`, {
-                    nombre,
-                    nombreusuario,
-                    apellidopa,
-                    apellidoma,
-                    direccionusuario,
-                    telefonousuario,
-                    email,
-                    password,
-                    idrol,
-                    estado,
-                    categoria,
-                    regimen
+                const response = await axios.post(`${API_BASE_URL}coordinador/publicacion`, {
+                    titulo,
+                    link,
+                    registro_id
                 }, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -154,7 +154,7 @@ const MyFormPage = () => {
                         <Button variant="outlined" onClick={handleCancel}>
                             Cancelar
                         </Button>
-                        <Button variant="contained">
+                        <Button variant="contained" onClick={handleSave}>
                             Guardar
                         </Button>
                     </Grid>

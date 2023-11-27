@@ -19,7 +19,7 @@ function ProyectForm() {
   const [iba, setIBA] = useState(labData?.iba || "");
   const [etapa, setetapa] = useState(labData?.etapa || "");
 
-  const navigate = useNavigate();  // Hook para la navegación
+  const navigate = useNavigate(); // Hook para la navegación
 
   const handleFileNameChange = (e) => {
     setFileName(e.target.value);
@@ -74,7 +74,7 @@ function ProyectForm() {
         console.error('registro_id no está definido.');
         return;
       }
-      formData.append("registro_id", labData.registro_id);
+      formData.append('registro_id', labData.registro_id);
 
       const token = localStorage.getItem('token');
       if (!token) {
@@ -84,9 +84,9 @@ function ProyectForm() {
 
       const config = {
         headers: {
-          Accept: "application/json",
+          Accept: 'application/json',
           Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
         },
       };
 
@@ -103,13 +103,12 @@ function ProyectForm() {
         response = await axios.post(apiUrl, formData, config);
       }
 
-      console.log("Response:", response.data);
+      console.log('Response:', response.data);
 
       // Redirige al usuario después de una respuesta exitosa
       navigate('/ManageProyects', { state: { labData } });
-
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
     }
   };
 
@@ -130,9 +129,8 @@ function ProyectForm() {
       display: 'none',
     },
     inputWithIcon: {
-      paddingRight: 0
+      paddingRight: 0,
     },
-
   };
 
   const triggerFileSelect = () => {
@@ -148,7 +146,7 @@ function ProyectForm() {
             name="nombreProyecto"
             label="Nombre"
             variant="outlined"
-            size='small'
+            size="small"
             margin="dense"
             InputLabelProps={{ style: styles.label }}
             style={styles.textField}
@@ -162,11 +160,11 @@ function ProyectForm() {
             name="imagenReferencial"
             label="Imagen de Equipos"
             variant="outlined"
-            size='small'
+            size="small"
             margin="dense"
             InputLabelProps={{ style: styles.label }}
             style={styles.textField}
-            value={fileName || " "}
+            value={fileName || ' '}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end" style={styles.inputWithIcon}>
@@ -174,7 +172,7 @@ function ProyectForm() {
                     <AttachFileIcon />
                   </IconButton>
                 </InputAdornment>
-              )
+              ),
             }}
           />
           <input type="file" ref={fileInputRef} style={styles.fileInput} onChange={handleFileChange} />
@@ -187,7 +185,7 @@ function ProyectForm() {
             name="investigador"
             label="Investigador"
             variant="outlined"
-            size='small'
+            size="small"
             margin="dense"
             InputLabelProps={{ style: styles.label }}
             style={styles.textField}
@@ -201,7 +199,7 @@ function ProyectForm() {
             name="doi"
             label="DOI"
             variant="outlined"
-            size='small'
+            size="small"
             margin="dense"
             InputLabelProps={{ style: styles.label }}
             style={styles.textField}
@@ -217,7 +215,7 @@ function ProyectForm() {
             name="coinvestigadores"
             label="Co-Investigadores"
             variant="outlined"
-            size='small'
+            size="small"
             margin="dense"
             InputLabelProps={{ style: styles.label }}
             style={styles.textField}
@@ -231,7 +229,7 @@ function ProyectForm() {
             name="resumen"
             label="Resumen"
             variant="outlined"
-            size='small'
+            size="small"
             margin="dense"
             InputLabelProps={{ style: styles.label }}
             style={styles.textField}
@@ -247,7 +245,7 @@ function ProyectForm() {
             name="iba"
             label="IBA"
             variant="outlined"
-            size='small'
+            size="small"
             margin="dense"
             InputLabelProps={{ style: styles.label }}
             style={styles.textField}
@@ -277,10 +275,11 @@ function ProyectForm() {
         </Grid>
       </Grid>
       <br />
-      <Button variant="contained" style={styles.button} onClick={subirArchivo}>Guardar</Button>
+      <Button variant="contained" style={styles.button} onClick={subirArchivo}>
+        Guardar
+      </Button>
     </form>
   );
-
 }
 
 export default ProyectForm;

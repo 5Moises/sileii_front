@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../js/config';
 
 function Formulario({ labData }) {
+  // Estados para gestionar los campos del formulario y las opciones de selección
   const [responsable, setResponsable] = useState(null);
   const [laboratorio, setLaboratorio] = useState(null);
   const [area, setArea] = useState(null);
@@ -104,6 +105,7 @@ function Formulario({ labData }) {
     const fetchOptions = async () => {
       const responsablesData = await fetchAPI('directores');
 
+      // Transformar los datos y actualizar las opciones de responsables
       if (responsablesData && responsablesData.directores) {
         const transformedResponsables = responsablesData.directores.map(directores => ({
           label: `${directores.nombre} ${directores.apellido_paterno} ${directores.apellido_materno}`,
@@ -119,7 +121,7 @@ function Formulario({ labData }) {
       setDataLoaded(true);
     };
 
-
+    // Llamar a la función de obtención de opciones al cargar el componente
     fetchOptions();
   }, []);
 
@@ -129,11 +131,13 @@ function Formulario({ labData }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    // Validación: todos los campos deben completarse
     if (!responsable) {
       setError('Todos los campos deben completarse.');
       return;
     }
 
+    // Datos a enviar en la solicitud    
     const data = {
       nombre: ubicacion,
       mision: '',
@@ -146,6 +150,8 @@ function Formulario({ labData }) {
 
     };
     let response;
+
+    // Determinar si se está actualizando o creando un nuevo registro    
     if (registroId) {
       // Actualizar el registro existente
       response = await fetchAPI(`registroLaboratorio/${registroId}`, 'PUT', data);
@@ -154,6 +160,7 @@ function Formulario({ labData }) {
       response = await fetchAPI('institutos', 'POST', data);
     }
     if (response) {
+    // Verificar la respuesta de la API y redirigir a la página correspondiente      
       navigate('/gestion_resp_insti');
     } else {
       setError('Ocurrió un error al procesar la solicitud.');
@@ -171,6 +178,7 @@ function Formulario({ labData }) {
           value={ubicacion}
           onChange={(event) => setUbicacion(event.target.value)}
         />
+        {/* Selector de director del instituto */}        
         <Autocomplete
           options={responsablesOptions}
           getOptionLabel={(option) => option.label}
@@ -182,9 +190,11 @@ function Formulario({ labData }) {
           isOptionEqualToValue={(option, value) => option.value === value.value}
           onChange={(event, newValue) => setResponsable(newValue)}
         />
+        {/* Botón de envío del formulario */}        
         <Button type="submit" variant="contained" style={{ background: "#64001d" }}>
           ENVIAR
         </Button>
+        {/* Mensaje de error (si hay alguno) */}        
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </div>
     </form>

@@ -8,9 +8,12 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom';
 import { API_BASE_URL } from '../js/config';
 
+// Definir un componente funcional llamado G_Proyects
 function G_Proyects() {
+  // Obtener la ubicación actual de la aplicación  
   const location = useLocation();
 
+  // Función que devuelve el color según el estado del proyecto  
   const getStatusColor = (status) => {
     switch (status) {
       case 'Inicio':
@@ -24,25 +27,31 @@ function G_Proyects() {
     }
   };
 
-  const [Rol, setLab] = useState([]);
-  const [documents, setDocuments] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [currentPage, setCurrentPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const navigate = useNavigate();
-  const [users, setUsers] = useState({ nombreusuario: '', rol: 0, id_user: 0 });
-  const labData = location.state?.labData;
+  // Estados del componente
+  const [Rol, setLab] = useState([]); // Estado para almacenar información sobre roles
+  const [documents, setDocuments] = useState([]); // Estado para almacenar información sobre documentos
+  const [searchQuery, setSearchQuery] = useState(''); // Estado para almacenar la consulta de búsqueda
+  const [currentPage, setCurrentPage] = useState(0); // Estado para la página actual de la tabla
+  const [rowsPerPage, setRowsPerPage] = useState(5); // Estado para la cantidad de filas por página
+  const navigate = useNavigate(); // Función de navegación
+  const [users, setUsers] = useState({ nombreusuario: '', rol: 0, id_user: 0 }); // Estado para información del usuario
+  const labData = location.state?.labData; // Obtener datos de laboratorio de la ubicación
 
+  // Efecto que se ejecuta al cargar el componente  
   useEffect(() => {
+    // Obtener el token de autenticación y el correo electrónico del almacenamiento local
     const token = localStorage.getItem('token');
     const email_local = localStorage.getItem('correo');
 
+    // Verificar si el token existe en el almacenamiento local
     if (!token) {
       console.error('Token de autenticación no encontrado en el localStorage.');
       return;
     }
 
+    // Verificar si el correo electrónico existe en el almacenamiento local
     if (email_local) {
+      // Realizar una solicitud para obtener información del usuario por correo electrónico
       axios.get(`${API_BASE_URL}usuarios/getAllByEmail/${email_local}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -51,13 +60,16 @@ function G_Proyects() {
       })
         .then((response) => {
           if (response.status === 200) {
+            // Extraer la información del usuario desde la respuesta
             const userData = response.data.usuarios[0];
+            // Actualizar el estado con la información del usuario
             setUsers({
               nombreusuario: userData.correo,
               rol: userData.rol.rol_id,
               id_user: userData.usuario_id
             });
-
+            
+            // Verificar el rol del usuario y realizar acciones específicas
             if (userData.rol.rol_id === 2) {
               fetchCoordinatorDocuments(userData.usuario_id, token);
             } else {
@@ -67,11 +79,12 @@ function G_Proyects() {
         })
         .catch(console.error);
     }
-  }, []);
+  }, []); // El efecto se ejecuta solo una vez al montar el componente
 
-
+  // Función asincrónica para obtener documentos del operador del laboratorio
   const fetchOperadorLabs = async (userId, token) => {
     try {
+      // Realizar una solicitud para obtener documentos      
       const response = await axios.get(`${API_BASE_URL}documentos`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -80,7 +93,9 @@ function G_Proyects() {
       });
 
       if (response.status === 200) {
+        // Filtrar los documentos por el ID del laboratorio y el estado activo        
         const filteredDocs = response.data.documentos.filter(doc => doc.registro_id === labData.registro_id && doc.estado === true);
+        // Actualizar el estado con los documentos filtrados
         setDocuments(filteredDocs);
       }
     } catch (error) {
@@ -88,8 +103,10 @@ function G_Proyects() {
     }
   };
 
+  // Función asincrónica para obtener documentos del coordinador del laboratorio
   const fetchCoordinatorDocuments = async (userId, token) => {
     try {
+      // Realizar una solicitud para obtener proyectos del coordinador
       console.log(labData.registro_id)
       const response = await axios.get(`${API_BASE_URL}coordinador/proyectos/${labData.registro_id}`, {
         headers: {
@@ -99,7 +116,9 @@ function G_Proyects() {
       });
 
       if (response.status === 200) {
+        // Filtrar los proyectos por estado activo
         const filteredDocs = response.data.proyectos.filter(doc => doc.estado === true);
+        // Actualizar el estado con los proyectos filtrados
         setDocuments(filteredDocs);
       }
     } catch (error) {
@@ -107,20 +126,25 @@ function G_Proyects() {
     }
   };
 
-
+  // Filtrar elementos según el rol del usuario y la consulta de búsqueda
   const filteredItems = users.rol === 2 ? documents.filter(doc => String(doc.documento_id).includes(searchQuery))
     : Rol.filter(user => String(user.laboratorio_id).includes(searchQuery));
 
+  // Obtener elementos paginados según la página actual y la cantidad de filas por página
   const paginatedItems = filteredItems.slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage);
+  // Calcular el número total de páginas para la paginación
   const totalPages = Math.ceil(filteredItems.length / rowsPerPage);
 
-
+  // Función para manejar la actualización de un usuario
   const handleUpdateUser = (userToEdit) => navigate('/UpdateProyect', { state: { userToEdit } });
+  // Función para manejar la adición de documentos
   const handleAddDocumentes = (userToEdit) => navigate('/AddProyect', { state: { userToEdit } });
+  // Función para manejar la eliminación de información
   const handleDeleteInfo = async userId => {
     const token = localStorage.getItem('token');
 
     try {
+      // Realizar una solicitud para eliminar un proyecto  
       const response = await axios.delete(`${API_BASE_URL}coordinador/proyectos/${userId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -128,6 +152,7 @@ function G_Proyects() {
       });
 
       if (response.status >= 200 && response.status <= 300) {
+        // Recargar la página después de una eliminación exitosa
         window.location.reload();
       } else {
         console.error('Error en la respuesta de la API:', response.status);
@@ -137,6 +162,7 @@ function G_Proyects() {
     }
   };
 
+  // Renderizar el componente
   return (
     <Container
       maxWidth="xl"
@@ -162,7 +188,7 @@ function G_Proyects() {
           Gestión de Proyectos
         </Typography>
 
-
+        {/* Barra de herramientas con botón Agregar y campo de búsqueda */}
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} sm={10}>
             <Button
@@ -185,6 +211,7 @@ function G_Proyects() {
           </Grid>
         </Grid>
 
+        {/* Tabla que muestra la información de los proyectos */}
         <TableContainer style={{ maxHeight: '50vh' }}>
           <Table>
             <TableHead>
@@ -197,16 +224,19 @@ function G_Proyects() {
               </TableRow>
             </TableHead>
             <TableBody>
+              {/* Mapear y renderizar cada fila de la tabla */}
               {paginatedItems.map((document, index) => (
                 <TableRow key={index}>
                   <TableCell sx={{ textAlign: 'center' }}>{document.nombre_proyecto}</TableCell>
                   <TableCell sx={{ textAlign: 'center' }}>{document.nombre_proyecto}</TableCell>
                   <TableCell sx={{ textAlign: 'center' }}>
+                    {/* Mostrar el estado del proyecto con un estilo de color */}
                     <span style={{ backgroundColor: getStatusColor(document.etapa), padding: '5px', borderRadius: '5px' }}>
                       {document.etapa}
                     </span>
                   </TableCell>
                   <TableCell sx={{ textAlign: 'center' }}>
+                  {/* Botones para modificar y eliminar proyectos */}
                     <Grid container spacing={1} alignItems="center" justifyContent="center">
                       <Grid item xs={12} sm={4}>
                         <Button
@@ -237,6 +267,7 @@ function G_Proyects() {
         </TableContainer>
 
         {/* PAGINACIÓN DE LA TABLA */}
+        {/* Botones de paginación */}
         <div style={{ display: 'flex', justifyContent: 'center', margin: '20px' }}>
 
           {[...Array(totalPages)].map((_, index) => (

@@ -15,49 +15,72 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { API_BASE_URL } from '../js/config';
 
-
+// Componente funcional ListaLab
 function ListaLab() {
     const navigate = useNavigate();
     const location = useLocation();
     const labData = location.state?.labData;
     const [showInactive, setShowInactive] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
-
-    //const [linesInves, setLinesInves] = useState([]);
-
+    const [linesInves, setLinesInves] = useState([]);
     const [showPaper, setShowPaper] = useState(false);
+    const [userToDelete, setuserToDelete] = useState(null);
+
+
 
     useEffect(() => {
+        // Obtener el token de autenticación y el correo electrónico del almacenamiento local
         const token = localStorage.getItem('token');
 
-        if (token) {
-            setShowPaper(true);
-        } else {
+        // Verificar si el token existe en el almacenamiento local
+        if (!token) {
+            console.error('Token de autenticación no encontrado en el localStorage.');
             setShowPaper(false);
+            return;
+
+        }
+        else {
+            setShowPaper(true);
         }
 
-    }, []);
+        // Verificar si el correo electrónico existe en el almacenamiento local
+        if (labData?.laboratorio_id) {
+            // Realizar una solicitud para obtener información del usuario por correo electrónico
+            axios.get(`${API_BASE_URL}coordinador/publicaciones/${labData?.laboratorio_id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json',
+                },
+            })
+                .then((response) => {
+                    if (response.status === 200) {
+                        const rawData = response.data.publicaciones;
+                        console.log(response.data)
+                        const filteredData = rawData.filter(entry => entry.estado === true);
+                        setLinesInves(filteredData);
+                    }
 
-    const [linesInves, setLinesInves] = useState([
-        { id: 1, documento: 'Bioquímica.pdf', nombre: 'Estudio de proteínas' },
-        { id: 2, documento: 'Física.pdf', nombre: 'Mecánica cuántica' },
-        { id: 3, documento: 'Matemáticas.pdf', nombre: 'Álgebra lineal avanzada' },
-        { id: 4, documento: 'Medicina.pdf', nombre: 'Investigación genómica' },
-        { id: 5, documento: 'Química.pdf', nombre: 'Estudio de moléculas orgánicas' },
-        { id: 6, documento: 'Ingeniería.pdf', nombre: 'Robótica avanzada' },
-    ]);
+                })
+                .catch(
+                    console.error()
+                );
+        }
+    }, []);
+    // Datos de ejemplo para la tabla
+
 
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const rowsPerPage = 5;
     //const handleView = (userToEdit) => navigate('/view_responsable', { state: { userToEdit } });
 
-
+    // Usuarios filtrados por la búsqueda
     const filteredUsers = linesInves.filter((user) =>
-        user.nombre.toLowerCase().includes(searchQuery.toLowerCase())
+        user.titulo.toLowerCase().includes(searchQuery.toLowerCase())
     );
-
+    // Usuarios paginados según la página actual
     const paginatedUsers = filteredUsers.slice(
         currentPage * rowsPerPage,
         currentPage * rowsPerPage + rowsPerPage
@@ -71,35 +94,63 @@ function ListaLab() {
     const handleadd = () => {
         navigate('/add_posted', { state: { labData } });
     };
+    const handleUpdateUser = (labData) => {
+        navigate('/add_posted', { state: { labData } });
+    };
 
-    const handleOpenDialog = (userId) => {
-        //setuserToDelete(userId);
+
+    const deleteUser = async publicacion_id => {
+        const token = localStorage.getItem('token');
+
+        try {
+            const response = await axios.delete(`${API_BASE_URL}coordinador/publicacion/${publicacion_id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (response.status === 200) {
+                const updatedUsers = linesInves.filter(user => user.publicacion_id !== publicacion_id);
+                setLinesInves(updatedUsers);
+            } else {
+                console.error('Error en la respuesta de la API:', response.status);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const handleOpenDialog = (publicacion_id) => {
+        setuserToDelete(publicacion_id);
         setOpenDialog(true);
     };
 
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
-        //setuserToDelete(null);
+        setuserToDelete(null);
     };
 
     const confirmDelete = () => {
-        //deleteUser(userToDelete);
+        deleteUser(userToDelete);
         handleCloseDialog();
     };
+
+    // Renderizar el componente ListaLab    
     return (
         <Container maxWidth="xl" sx={{ minHeight: '80vh', paddingTop: '5%', paddingBottom: '5%' }}>
             <Paper elevation={3} sx={{ padding: 3, width: '100%' }}>
-
+                {/* Encabezado */}
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                     <IconButton aria-label="back" onClick={handleCancel} sx={{ color: '#64001D', fontWeight: 'bold' }}>
                         <ArrowBackIcon />
                     </IconButton>
                     <Typography variant="h4" align="left" gutterBottom sx={{ color: '#64001D', fontWeight: 'bold' }}>
-                       Publicaciones
+                        Publicaciones
                     </Typography>
                 </Box>
 
+                {/* Botones de Agregar y Buscar */}
                 {/* {showPaper ? (</>):(</>)}*/}
                 {showPaper ? (
                     <Grid container spacing={2} alignItems="center">
@@ -139,7 +190,7 @@ function ListaLab() {
                         </Grid>
                     </Grid>
                 )}
-
+                {/* Tabla de Publicaciones */}
                 <TableContainer sx={{ maxHeight: '50vh', marginTop: 2 }}>
                     <Table>
                         <TableHead>
@@ -151,10 +202,11 @@ function ListaLab() {
                         <TableBody>
                             {paginatedUsers.map((user, index) => (
                                 <TableRow key={index}>
-                                    <TableCell sx={{ textAlign: 'center', }}>{user.nombre}</TableCell>
+                                    <TableCell sx={{ textAlign: 'center', }}>{user.titulo}</TableCell>
                                     {showPaper ? (
 
                                         <TableCell sx={{ textAlign: 'center' }}>
+                                            {/* Acciones: Editar y Eliminar */}
                                             <Grid container spacing={1} alignItems="center" justifyContent="center">
                                                 <Grid item xs={4}>
                                                     <IconButton
@@ -164,7 +216,7 @@ function ListaLab() {
                                                 </Grid>
                                                 <Grid item xs={4}>
                                                     <IconButton
-                                                        onClick={() => handleOpenDialog(user.usuario_id)}>
+                                                        onClick={() => handleOpenDialog(user.publicacion_id)}>
                                                         <DeleteIcon color="error" />
                                                     </IconButton>
                                                 </Grid>
@@ -177,7 +229,7 @@ function ListaLab() {
                         </TableBody>
                     </Table>
                 </TableContainer>
-
+                {/* Paginación */}
                 <Grid container spacing={2} justifyContent="center" sx={{ marginTop: 2 }}>
                     {[...Array(totalPages)].map((_, index) => (
                         <Grid item key={index}>
@@ -192,6 +244,7 @@ function ListaLab() {
                     ))}
                 </Grid>
             </Paper>
+            {/* Cuadro de diálogo de confirmación de eliminación */}
             <Dialog
                 open={openDialog}
                 onClose={handleCloseDialog}
@@ -207,6 +260,7 @@ function ListaLab() {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
+                    {/* Botones de Cancelar y Eliminar */}
                     <Button onClick={handleCloseDialog} color="primary">
                         Cancelar
                     </Button>
@@ -218,5 +272,6 @@ function ListaLab() {
         </Container>
     );
 }
+
 
 export default ListaLab;

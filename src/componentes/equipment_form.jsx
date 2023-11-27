@@ -5,6 +5,7 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../js/config';
 
+// Definir estilos para el componente
 const styles = {
   label: {
     color: '#555',
@@ -25,17 +26,24 @@ const styles = {
     paddingRight: 0
   },
 };
+
+// Función para formatear la fecha
 function formatDate(dateString) {
   // Extrae solo la fecha (ignorando la hora)
   return dateString.split(' ')[0];
 }
 
+// Componente funcional EquipmentForm
 function EquipmentForm() {
+  // Obtener la ubicación y datos del laboratorio de la ubicación actual  
   const location = useLocation();
   const labData = location.state?.userToEdit;
 
+  // Configurar la navegación  
   const navigate = useNavigate();
+  // Referencia para el input de archivo
   const fileInputRef = useRef();
+  // Función para obtener la fecha actual en formato YYYY-MM-DD  
   const getCurrentDate = () => {
     const today = new Date();
     const year = today.getFullYear();
@@ -43,6 +51,8 @@ function EquipmentForm() {
     const day = String(today.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   };
+
+  // Estado para el formulario  
   const [formData, setFormData] = useState({
     fileName: labData?.nombre_imagen || "",
     selectedFile: null,
@@ -55,13 +65,14 @@ function EquipmentForm() {
     descripcion: labData?.descripcion || ""
   });
 
+  // Manejar cambios en los campos del formulario
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
 
-
+  // Manejar cambios en el input de archivo
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setFormData((prevData) => ({
@@ -71,13 +82,17 @@ function EquipmentForm() {
     }));
   };
 
+  // Mostrar el selector de archivo al hacer clic en el icono
   const triggerFileSelect = () => {
     fileInputRef.current.click();
   };
+  // Función para enviar el formulario y subir el archivo  
   const subirArchivo = async () => {
     try {
+      // Desestructurar datos del formulario      
       const { selectedFile, fileName, nombreEquipmento, codigo_patrimonio, accesorios, marca, insumos, descripcion, fecha_adquisicion } = formData;
       const file = selectedFile;
+      // Crear un objeto FormData y agregar datos
       const formPayload = new FormData(); // Aquí cambiamos el nombre
       formPayload.append("registro_id", labData.registro_id);
       formPayload.append("nombre_imagen", fileName);
@@ -91,6 +106,8 @@ function EquipmentForm() {
       formPayload.append("descripcion", descripcion);
       formPayload.append("imagen_equipo", file);
       console.log(fileName);
+
+      // Verificar existencia de datos y token      
       if (!labData || labData.registro_id === undefined) {
         console.error('registro_id no está definido.');
         return;
@@ -102,6 +119,7 @@ function EquipmentForm() {
         return;
       }
 
+      // Configuración de encabezados para la solicitud
       const config = {
         headers: {
           Accept: "application/json",
@@ -110,8 +128,10 @@ function EquipmentForm() {
         },
       };
 
+      // Inicializar la variable de respuesta
       let response;
 
+      // Verificar si el equipo ya tiene un ID (solicitud PUT) o no (solicitud POST)      
       if (labData.equipo_id) {
         console.log(labData.equipo_id)
         const apiUrl = `${API_BASE_URL}coordinador/equipos/${labData.equipo_id}`;
@@ -123,6 +143,7 @@ function EquipmentForm() {
         response = await axios.post(apiUrl, formPayload, config);
       }
 
+      // Registrar la respuesta en la consola      
       console.log("Response:", response.data);
 
       // Redirige al usuario después de una respuesta exitosa
@@ -163,10 +184,11 @@ function EquipmentForm() {
   };
 
 
-
+  // Renderizar el formulario
   return (
     <form style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '8px', boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.1)' }}>
       <Grid container spacing={3}>
+        {/* Input de imagen */}
         <Grid item xs={12} md={6}>
           <TextField
             fullWidth
@@ -186,8 +208,10 @@ function EquipmentForm() {
               )
             }}
           />
+          {/* Input oculto de tipo archivo */}
           <input type="file" ref={fileInputRef} style={styles.fileInput} onChange={handleFileChange} />
         </Grid>
+        {/* Otros campos del formulario */}
         <Grid item xs={12} md={6}>
           <TextField
             fullWidth
@@ -274,6 +298,7 @@ function EquipmentForm() {
           />
         </Grid>
         <Grid item xs={12}>
+          {/* Botón para guardar el formulario */}
           <Button variant="contained" style={styles.button} onClick={subirArchivo}>Guardar</Button>
         </Grid>
       </Grid>
