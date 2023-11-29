@@ -55,36 +55,60 @@ function ListaGaleria() {
 
         // Verificar si el token existe en el almacenamiento local
         if (!token) {
-            console.error('Token de autenticación no encontrado en el localStorage.');
+            if (labData?.registro_id) {
+                // Realizar una solicitud para obtener información del usuario por correo electrónico
+                axios.get(`${API_BASE_URL}invitado/galeriaLaboratorios/${labData?.registro_id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json',
+                    },
+                })
+                    .then((response) => {
+                        if (response.status === 200) {
+                            const rawData = response.data.galeria;
+                            setLinesInves(rawData);
+
+                        }
+                        else
+                        {
+                            console.log(labData?.registro_id)
+                        }
+
+                    })
+                    .catch(
+                        console.error()
+                    );
+            }
             setShowPaper(false);
             return;
 
         }
         else {
+            if (labData?.laboratorio_id) {
+                // Realizar una solicitud para obtener información del usuario por correo electrónico
+                axios.get(`${API_BASE_URL}coordinador/galeriaLaboratorios/${labData?.laboratorio_id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json',
+                    },
+                })
+                    .then((response) => {
+                        if (response.status === 200) {
+                            const rawData = response.data.galeria;
+                            setLinesInves(rawData);
+
+                        }
+
+                    })
+                    .catch(
+                        console.error()
+                    );
+            }
             setShowPaper(true);
         }
 
         // Verificar si el correo electrónico existe en el almacenamiento local
-        if (labData?.laboratorio_id) {
-            // Realizar una solicitud para obtener información del usuario por correo electrónico
-            axios.get(`${API_BASE_URL}coordinador/galeriaLaboratorios/${labData?.laboratorio_id}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json',
-                },
-            })
-                .then((response) => {
-                    if (response.status === 200) {
-                        const rawData = response.data.galeria;
-                        setLinesInves(rawData);
 
-                    }
-
-                })
-                .catch(
-                    console.error()
-                );
-        }
     }, []);
     // Datos de ejemplo para la tabla
 
@@ -123,7 +147,7 @@ function ListaGaleria() {
 
         try {
             let servicio_id = galeria_id
-            const response = await axios.delete(`${API_BASE_URL}coordinador/galeriaLaboratorio/${servicio_id}`, {                
+            const response = await axios.delete(`${API_BASE_URL}coordinador/galeriaLaboratorio/${servicio_id}`, {
             }, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -143,7 +167,7 @@ function ListaGaleria() {
         }
     };
 
-    
+
 
     const handleOpenDialog = (galeria_id) => {
         setuserToDelete(galeria_id);
@@ -179,7 +203,7 @@ function ListaGaleria() {
                 {/* {showPaper ? (</>):(</>)}*/}
                 {showPaper ? (
                     <Grid container spacing={2} alignItems="center">
-                        <Grid  xs={12} sm={10}>
+                        <Grid xs={12} sm={10}>
                             <Button
                                 variant="contained"
                                 style={{ backgroundColor: '#64001D', color: '#FFFFFF' }}
@@ -188,7 +212,7 @@ function ListaGaleria() {
                                 Agregar
                             </Button>
                         </Grid>
-                        <Grid  xs={12} sm={2}>
+                        <Grid xs={12} sm={2}>
                             <TextField
                                 label="Buscar"
                                 variant="outlined"
@@ -203,7 +227,7 @@ function ListaGaleria() {
                 ) : (
                     <Grid container spacing={2} alignItems="center">
 
-                        <Grid  xs={12} sm={2}>
+                        <Grid xs={12} sm={2}>
                             <TextField
                                 label="Buscar"
                                 variant="outlined"
@@ -221,7 +245,7 @@ function ListaGaleria() {
 
 
                     {paginatedUsers.map((project, index) => (
-                        <Grid  xs={12} sm={6} md={4} lg={4} key={index} sx={{padding:"5%"}} >
+                        <Grid xs={12} sm={6} md={4} lg={4} key={index} sx={{ padding: "5%" }} >
                             <Card >
                                 <CardMedia
                                     component="img"
@@ -236,7 +260,7 @@ function ListaGaleria() {
                                     <Typography gutterBottom variant="h6" component="div">
                                         {project.descripcion}
                                     </Typography>
-                                    <Grid container xs={12} style={{ paddingTop: '4%', alignContent: 'center', textAlign: 'center' }}
+                                    {showPaper ? ( <Grid container xs={12} style={{ paddingTop: '4%', alignContent: 'center', textAlign: 'center' }}
                                     >
                                         <Grid item xs={6} md={6}>
                                             {/* Botón para guardar el formulario */}
@@ -246,7 +270,7 @@ function ListaGaleria() {
                                             {/* Botón para guardar el formulario */}
                                             <Button variant="contained" style={styles.button} onClick={() => handleOpenDialog(project.galeria_id)}>Eliminar</Button>
                                         </Grid>
-                                    </Grid>
+                                    </Grid>):(<></>)}
                                 </CardContent>
                             </Card>
                         </Grid>

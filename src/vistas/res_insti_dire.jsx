@@ -49,7 +49,7 @@ function ListaLab() {
                    
                     const rawData = response.data.institutos;
                     const filteredData = rawData.filter(entry => entry.estado === true && entry.usuario_director === parseInt(id_dire,10) );
-                    
+                    console.log(filteredData)
 
                     setLab(filteredData);
                 } else {

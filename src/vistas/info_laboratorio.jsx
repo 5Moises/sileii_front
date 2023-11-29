@@ -27,7 +27,9 @@ function App() {
     const handleViwService = (userToEdit) => navigate('/res_servicios_public', { state: { userToEdit } });
     const handleViewProyectos = (userToEdit) => navigate('/res_proyectos_public', { state: { userToEdit } });
     const handleViewEquipos = (userToEdit) => navigate('/res_equipo_public', { state: { userToEdit } });
+    const handleViewGalery = (labData) => navigate('/res_galeria_public', { state: { labData } });
 
+    
     return (
         <Container
             maxWidth="lg"
@@ -176,6 +178,16 @@ function App() {
 
                                     >
                                         Lineas de Investigación del Laboratorio
+                                    </Button>
+                                </Typography>
+                                <Typography variant="h6" gutterBottom align="left">
+                                    <Button
+                                        align="left"
+                                        style={{ background: 'transparent', color: '#2424E1', textDecoration: 'underline', textAlign: 'left' }}
+                                        onClick={() => handleViewGalery(labData)}
+
+                                    >
+                                        GALERIA DE FOTOS
                                     </Button>
                                 </Typography>
 

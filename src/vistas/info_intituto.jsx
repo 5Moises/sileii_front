@@ -51,7 +51,16 @@ function App() {
 
                     <Box display="flex" justifyContent="space-between" alignItems="center" flexDirection="column" height="100%">
                         <img src={Escudo} alt="Logo-Sileii" style={{ maxWidth: "80%", height: "auto" }} />
+                        <Typography variant="h6" gutterBottom align="left">
+                            <Button
+                                align="left"
+                                style={{ background: 'transparent', color: '#2424E1', textDecoration: 'underline', textAlign: 'left' }}
+                                onClick={() => window.location.href = `${labData?.url_instituto}`}
 
+                            >
+                                URL DEL INSTITUTO
+                            </Button>
+                        </Typography>
                     </Box>
 
                 </Grid>

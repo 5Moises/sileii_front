@@ -22,6 +22,7 @@ const MyFormPage = () => {
     const [contacto, setContacto] = useState(labToEdit?.contacto || '');
     const [comite_directivo, setcomite_directivo] = useState(labToEdit?.comite_directivo || '');
     const [isLoading, setIsLoading] = useState(true);
+    const [url_instituto, SetUrl_instituto] = useState(labToEdit?.url_instituto || '');
 
     const [error, setError] = useState(false);
 
@@ -91,7 +92,7 @@ const MyFormPage = () => {
         setFileName(file.name);
     };
     const handleSave = async () => {
-        if (!mision || !vision || !instituto_id || !historia || !ubicacion || !contacto || !comite_directivo) {
+        if (!mision || !vision || !instituto_id || !historia || !ubicacion || !contacto || !comite_directivo || !url_instituto) {
             setError(true);
             setDialogMessage("Hay campos obligatorios que debe completar.");
             setDialogOpen(true);
@@ -119,10 +120,11 @@ const MyFormPage = () => {
             formData.append("vision", vision);
             formData.append("historia", historia);
             formData.append("contacto", contacto);
-            formData.append("ubicacion", ubicacion);            
+            formData.append("ubicacion", ubicacion);
             formData.append("comite_directivo", comite_directivo);
+            formData.append("url_instituto", url_instituto);
 
-            
+
             try {
                 const apiUrl = `${API_BASE_URL}directores/completar/${instituto_id}`;
                 // Si labData.nombre_documento tiene datos, realiza una solicitud PUT
@@ -311,7 +313,18 @@ const MyFormPage = () => {
 
                         </Grid>
                     </Grid>
-
+                    <Grid item xs={12}>
+                        <TextField
+                            label="URL"
+                            type="text"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            fullWidth
+                            value={url_instituto}
+                            onChange={(e) => SetUrl_instituto(e.target.value)}
+                        />
+                    </Grid>
 
 
                     <Grid item xs={12} display="flex" justifyContent="flex-end" gap={2}>
