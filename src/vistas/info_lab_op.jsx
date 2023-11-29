@@ -34,6 +34,9 @@ function App() {
     const handlecrudservice = () => {
         navigate('/res_servicios_public', { state: { labData } });
     };
+    const handlecrudgalery = () => {
+        navigate('/res_galeria_public', { state: { labData } });
+    };
     //ManageDocuments
 
     //ManageProyects
@@ -110,7 +113,7 @@ function App() {
 
                     </Paper>
                 </Grid>
-                <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid item xs={12} sm={12} md={6} lg={8}>
                     <Box display="flex" justifyContent="center" alignItems="center">
                         <Button variant="contained" color="primary" style={{ margin: "10px", fontSize: "15px", background: "#64001d" }} onClick={() => handlecrudequipos()}>
                             Gestión Equipo
@@ -123,6 +126,9 @@ function App() {
                         </Button>
                         <Button variant="contained" style={{ margin: "10px", fontSize: "15px", background: "#64001d" }} onClick={() => handlecrudservice()}>
                             Gestión Servicios
+                        </Button>
+                        <Button variant="contained" style={{ margin: "10px", fontSize: "15px", background: "#64001d" }} onClick={() => handlecrudgalery()}>
+                            Galeria de fotos
                         </Button>
 
                     </Box>

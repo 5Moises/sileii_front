@@ -65,6 +65,9 @@ import Add_posted from "./vistas/add_posted";
 
 import Info_insti from "./vistas/info_intituto";
 
+import ResGaleriaPublic from "./vistas/res_galeria_public"
+import Add_image from "./vistas/add_image"
+
 
 function App() {
   return (
@@ -108,6 +111,8 @@ function App() {
         <Route path="/UpdateDocument" element={<Layout><UpdateDocument /></Layout>} />
         <Route path="/op_list" element={<Layout><List_op /></Layout>} />
         <Route path="/res_equipment" element={<Layout><Equipment /></Layout>} />
+        <Route path="/res_galeria_public" element={<Layout><ResGaleriaPublic /></Layout>} />
+        <Route path="/add_image" element={<Layout><Add_image /></Layout>} />
 
         
         {/* Otras Rutas de la Aplicación */}
