@@ -64,7 +64,6 @@ function DocumentForm() {
         response = await axios.post(apiUrl, formData, config);
       }
 
-      console.log("Response:", response.data);
 
       // Redirige al usuario después de una respuesta exitosa
       navigate('/ManageDocuments', { state: { labData } });

@@ -69,10 +69,7 @@ function ListaGaleria() {
                             setLinesInves(rawData);
 
                         }
-                        else
-                        {
-                            console.log(labData?.registro_id)
-                        }
+                       
 
                     })
                     .catch(

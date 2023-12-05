@@ -42,7 +42,6 @@ const MyFormPage = () => {
                 }
             });
             if (response.status === 200) {
-                console.log(response.data);
                 navigate(-1);
             }
 

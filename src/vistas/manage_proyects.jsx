@@ -107,7 +107,6 @@ function G_Proyects() {
   const fetchCoordinatorDocuments = async (userId, token) => {
     try {
       // Realizar una solicitud para obtener proyectos del coordinador
-      console.log(labData.registro_id)
       const response = await axios.get(`${API_BASE_URL}coordinador/proyectos/${labData.registro_id}`, {
         headers: {
           'Authorization': `Bearer ${token}`,

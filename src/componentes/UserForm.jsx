@@ -129,7 +129,6 @@ function UserForm() {
         rol: userToEdit.rol_id || 0,
       });
     }
-    console.log( location.state?.userToEdit);
   }, [location.state]);
 
 
@@ -182,7 +181,7 @@ function UserForm() {
         console.error('Token de autenticación no encontrado en el localStorage.');
         return;
       }
-      console.log("entra sin erroes")
+      
       const id_user_l = localStorage.getItem('id_user_l');;
       const emaile = formData.email;
       if (formData.id == 0) {
@@ -195,7 +194,7 @@ function UserForm() {
           })
           .then((response) => {
             if (response.status === 200) {
-              console.log(response);
+              
               setOpenDialog(true);
               setFormSubmitted(true);
               navigate('/res_users');
@@ -216,13 +215,12 @@ function UserForm() {
           })
           .then((response) => {
             if (response.status >= 200 && response.status<=300) {
-              console.log(response);
+              
               setOpenDialog(true);
               setFormSubmitted(true);
-              console.log(id_user_l)
-              console.log(id_user_l)
+              
+              
               if (parseInt(id_user_l, 10) === formData.id) {
-                console.log("ENTRA AL ID")
                 localStorage.setItem('correo', emaile);
                 navigate('/Inicio');
               }

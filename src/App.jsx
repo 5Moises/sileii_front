@@ -67,7 +67,18 @@ import Info_insti from "./vistas/info_intituto";
 
 import ResGaleriaPublic from "./vistas/res_galeria_public"
 import Add_image from "./vistas/add_image"
+import FuntionInsti from "./vistas/res_funtion_insti"
+import AddFuntion from "./vistas/add_funtion"
+import Res_Proyect_int from "./vistas/manage_proyects_inti"
+import AddProyect_Int from "./vistas/add_proyect_insti"
 
+import Res_public_Int from "./vistas/res_publicaciones_insti"
+
+import Res_convenio_Int from "./vistas/res_convenio_insti"
+
+import Add_public_Int from "./vistas/add_publicaciones_insti"
+
+import Add_convenio_Int from "./vistas/add_covenios_insti"
 
 function App() {
   return (
@@ -78,7 +89,16 @@ function App() {
         <Route path="/add_comite_director" element={<Layout><Add_users_dire /></Layout>} />
         <Route path="/complete_institutos" element={<Layout><Complete_inti /></Layout>} />
         <Route path="/info_intituto" element={<Layout><Info_insti /></Layout>} />
-        
+        <Route path="/res_funtion_insti" element={<Layout><FuntionInsti /></Layout>} />
+        <Route path="/add_funtion" element={<Layout><AddFuntion /></Layout>} />
+        <Route path="/manage_proyects_inti" element={<Layout><Res_Proyect_int /></Layout>} />
+        <Route path="/add_proyect_insti" element={<Layout><AddProyect_Int /></Layout>} />
+        <Route path="/res_publicaciones_insti" element={<Layout><Res_public_Int /></Layout>} />
+        <Route path="/res_convenio_insti" element={<Layout><Res_convenio_Int /></Layout>} />
+        <Route path="/add_publicaciones_insti" element={<Layout><Add_public_Int /></Layout>} />
+        <Route path="/add_covenios_insti" element={<Layout><Add_convenio_Int /></Layout>} />
+
+
 
         {/* Rutas de Autenticación */}
         <Route path="/" element={<NavbarLogin><Login /></NavbarLogin>} />

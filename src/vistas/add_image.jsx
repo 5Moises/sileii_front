@@ -110,12 +110,12 @@ function ImgForm() {
             const registro_id_d = labData?.laboratorio_id || labData?.registro_id;
             // Crear un objeto FormData y agregar datos
             const formPayload = new FormData(); // Aquí cambiamos el nombre
-            console.log(labData)
+            
             formPayload.append("registro_id", labData?.laboratorio_id || labData?.registro_id);
             formPayload.append("nombre_imagen", fileName);
             formPayload.append("descripcion", descripcion);
             formPayload.append("imagen_galeria", file);
-            console.log(fileName);
+            
 
             if (!registro_id_d || !descripcion) {
                 setError(true);
@@ -160,11 +160,10 @@ function ImgForm() {
             }
 
             // Registrar la respuesta en la consola      
-            console.log("Response:", response.data);
 
             // Redirige al usuario después de una respuesta exitosa
             if (response.status === 200) {
-                setDialogMessage("Petición exitosa");
+                setDialogMessage("La imagen se guardó Exitosamente");
                 setDialogOpen(true);
             } else {
                 setDialogMessage("Error al enviar el formulario:", response.status);

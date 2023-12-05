@@ -27,7 +27,6 @@ function ListaLab() {
                     },
                 });
 
-                console.log(response.status); // Ahora esto debería mostrar el código de estado HTTP
 
                 if (response.status === 200) {
                     const filteredDocs = response.data.equipos.filter(doc => doc.estado === true);

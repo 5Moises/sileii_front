@@ -31,7 +31,21 @@ function App() {
     const handlecruddocuments = () => {
         navigate('/ManageDocuments', { state: { labData } });
     };
-    //ManageDocuments
+    const handleViewInfo = () => {
+        navigate('/res_funtion_insti', { state: { labData } });
+    };
+    const handleViewProyect = () => {
+        navigate('/manage_proyects_inti', { state: { labData } });
+    };
+    const handleViewPublic = () => {
+        navigate('/res_publicaciones_insti', { state: { labData } });
+    };
+    const handleViewConvenios = () => {
+        navigate('/res_convenio_insti', { state: { labData } });
+    };
+
+    
+    //ManageDocuments 
 
     //ManageProyects
     return (
@@ -50,7 +64,39 @@ function App() {
                 <Grid item xs={12} sm={12} md={6} lg={6}>
 
                     <Box display="flex" justifyContent="space-between" alignItems="center" flexDirection="column" height="100%">
-                        <img src={Escudo} alt="Logo-Sileii" style={{ maxWidth: "80%", height: "auto" }} />
+                        <Grid item xs={12} display="flex" justifyContent="center" gap={2}>
+                            <Button
+                                variant="contained"
+                                style={{ backgroundColor: '#64001D', color: '#FFFFFF', marginBottom: '5%', maxWidth: '40%' }}
+                                onClick={() => handleViewInfo()}
+                            >
+                                Explorar Funciones
+                            </Button>
+                            <Button
+                                variant="contained"
+                                style={{ backgroundColor: '#64001D', color: '#FFFFFF', marginBottom: '5%', maxWidth: '40%' }}
+                                onClick={() => handleViewProyect()}
+                            >
+                                Proyectos de Investigación
+                            </Button>
+                        </Grid>
+                        <Grid item xs={12} display="flex" justifyContent="center" gap={2}>
+                            <Button
+                                variant="contained"
+                                style={{ backgroundColor: '#64001D', color: '#FFFFFF', marginBottom: '10%', maxWidth: '40%' }}
+                                onClick={() => handleViewPublic()}
+                            >
+                                Gestión de Publicaciones
+                            </Button>
+                            <Button
+                                variant="contained"
+                                style={{ backgroundColor: '#64001D', color: '#FFFFFF', marginBottom: '10%', maxWidth: '40%' }}
+                                onClick={() => handleViewConvenios()}
+                            >
+                                Convenios
+                            </Button>
+                        </Grid>
+                        <img src={Escudo} alt="Logo-Sileii" style={{ maxWidth: "50%", height: "auto" }} />
                         <Typography variant="h6" gutterBottom align="left">
                             <Button
                                 align="left"
@@ -60,9 +106,10 @@ function App() {
                             >
                                 URL DEL INSTITUTO
                             </Button>
-                        </Typography>
-                    </Box>
 
+                        </Typography>
+
+                    </Box>
                 </Grid>
 
                 {/* Columna Derecha (Formulario) */}

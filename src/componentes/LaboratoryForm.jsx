@@ -148,7 +148,6 @@ function Laboratory_Form() {
         console.error('Token de autenticación no encontrado en el localStorage.');
         return;
       }      
-      console.log("entra sin erroes")      
         axios
           .post(`${API_BASE_URL}laboratorios`, formData, {
             headers: {
@@ -158,7 +157,7 @@ function Laboratory_Form() {
           })
           .then((response) => {
             if (response.status === 200) {
-              console.log(response);              
+                           
               navigate('/res_laboratory');
             } else {
               console.error("Error en la respuesta de la API:", response.status);

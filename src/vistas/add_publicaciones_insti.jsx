@@ -5,50 +5,46 @@ import axios from 'axios'; // Asumiendo que estás usando axios para las peticio
 import { API_BASE_URL } from '../js/config';
 import { MenuItem, Select, Container, Grid, TextField, Button, Typography, IconButton, Paper, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel } from '@mui/material';
 
-// Componente funcional MyFormPage
-const MyFormPage = () => {
-    // Configurar navegación y estado para el cuadro de diálogo
+const AddFuntion = () => {
     const navigate = useNavigate();
     const [dialogOpen, setDialogOpen] = useState(false);
     const [dialogMessage, setDialogMessage] = useState('');
-    // Obtener la ubicación actual y los datos del laboratorio (si existen)
     const location = useLocation(); // Accede a la ubicación actual en la navegación
     const labToEdit = location.state?.labData || {};
+    const [url, setUrl] = useState(labToEdit?.link || '');
 
-    // Estados para los campos del formulario y manejo de errores
-    const [registro_id, setregistro_id] = useState(parseInt(labToEdit?.registro_id, 10));
-    const [nombre, setnombre] = useState(labToEdit.titulo || '');
+
+
+    const [instituto_id, setinstituto_id] = useState(parseInt(labToEdit?.instituto_id, 10));
+    const [titulo, setfuncion] = useState(labToEdit?.titulo || '');
+    const [publicacion_id, setfuncion_id] = useState(parseInt(labToEdit?.publicacion_id, 10));
 
 
     const [error, setError] = useState(false);
 
-    // Función para cancelar y regresar    
     const handleCancel = () => {
         navigate(-1);
     };
 
-    // Función para manejar el guardado del formulario
+
     const handleSave = async () => {
-        // Validar campos obligatorios      
-        if (!nombre) {
+        if (!titulo) {
             setError(true);
             setDialogMessage("Hay campos obligatorios que debe completar.");
             setDialogOpen(true);
             return;
         }
 
-     
-
         setError(false);
         const token = localStorage.getItem('token');
 
-        // Enviar solicitud PUT si hay un registro_id, de lo contrario, enviar solicitud POST
-        if (labToEdit.laboratorio_id) {
-            let registro_id = labToEdit.laboratorio_id;
-            let servicios = [nombre]
+        if (publicacion_id) {
             try {
-                const response = await axios.post(`${API_BASE_URL}coordinador/servicio/${registro_id}`, {
-                    servicios
+                let link= url;
+                const response = await axios.put(`${API_BASE_URL}publicacion/instituto/${publicacion_id}`, {
+                    titulo,
+                    link,
+                    instituto_id,
                 }, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -56,7 +52,7 @@ const MyFormPage = () => {
                     }
                 });
                 if (response.status >= 200 && response.status <= 300) {
-                    setDialogMessage("Petición exitosa");
+                    setDialogMessage("Se Ha Guardado Excitosamente la Publicación");
                     setDialogOpen(true);
 
                 }
@@ -70,12 +66,12 @@ const MyFormPage = () => {
             }
         }
         else {
-            let servicio = nombre;
-            let servicio_id = labToEdit.posicion;
             try {
-                const response = await axios.put(`${API_BASE_URL}coordinador/servicio/editar/${registro_id}`, {
-                    servicio_id,
-                    servicio
+                let link= url;
+                const response = await axios.post(`${API_BASE_URL}publicacion/instituto`, {
+                    titulo,
+                    link,
+                    instituto_id,
                 }, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -83,12 +79,9 @@ const MyFormPage = () => {
                     }
                 });
                 if (response.status >= 200 && response.status <= 300) {
-                    setDialogMessage("Petición exitosa");
+                    setDialogMessage("Se Ha Guardado Excitosamente la Publicación");
                     setDialogOpen(true);
 
-                }
-                else {
-                    setDialogMessage("Error al enviar el formulario:", error);
                 }
 
 
@@ -100,11 +93,9 @@ const MyFormPage = () => {
             }
         }
 
-
     };
-    // Función para cerrar el cuadro de diálogo    
     const handleCloseDialog = () => {
-        if (dialogMessage === 'Petición exitosa') {
+        if (dialogMessage === 'Se Ha Guardado Excitosamente la Publicación') {
             navigate(-1);
         }
         else {
@@ -113,42 +104,49 @@ const MyFormPage = () => {
 
     };
 
-    // Renderizar el formulario y los elementos UI
+
     return (
         <Container maxWidth="md" sx={{ py: 8 }}> {/* Padding top and bottom */}
             <Paper elevation={3} sx={{ p: { xs: 2, md: 4 } }}> {/* Responsive padding */}
                 <Grid container spacing={3} justifyContent="center">
-                    {/* Botón para regresar */}
                     <Grid item xs={12} display="flex" justifyContent="flex-start">
                         <IconButton aria-label="back" onClick={handleCancel}>
                             <ArrowBackIcon />
                         </IconButton>
                     </Grid>
 
-                    {/* Título del formulario */}
                     <Grid item xs={12}>
                         <Typography variant="h5" component="h2" textAlign="center">
-                            Servicio y Actividad
+                            Publicaciones
                         </Typography>
                     </Grid>
 
-                    {/* Campo de entrada de texto para el nombre */}
                     <Grid item xs={12}>
                         <TextField
-                            label="Nombre del Servicio / Actividad"
-                            multiline
-                            rows={4}
-                            placeholder="Ingrese el nombre"
-                            variant="outlined"
+                            label="titulo"
+                            type="input"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
                             fullWidth
-                            value={nombre}
-                            onChange={(e) => setnombre(e.target.value)}
+                            value={titulo}
+                            onChange={(e) => setfuncion(e.target.value)}
                         />
-
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="link / Enlace"
+                            type="input"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            fullWidth
+                            value={url}
+                            onChange={(e) => setUrl(e.target.value)}
+                        />
                     </Grid>
 
-                    {/* Botones de acción */}
-                    <Grid item xs={12} display="flex" justifyContent="flex-end" gap={2}>
+                    <Grid item xs={12} display="flex" justifyContent="center" gap={2}>
                         <Button variant="outlined" onClick={handleCancel}>
                             Cancelar
                         </Button>
@@ -158,7 +156,6 @@ const MyFormPage = () => {
                     </Grid>
                 </Grid>
             </Paper>
-            {/* Cuadro de diálogo para mostrar mensajes */}
             <Dialog open={dialogOpen} onClose={handleCloseDialog}>
                 <DialogTitle>Información</DialogTitle>
                 <DialogContent>
@@ -174,4 +171,4 @@ const MyFormPage = () => {
     );
 };
 
-export default MyFormPage;
+export default AddFuntion;

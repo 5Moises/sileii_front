@@ -79,7 +79,7 @@ function LaboratorioForm() {
                 }
             });
             if (response.status === 200) {
-                console.log(response.data);
+                
                 navigate('/op_listaLab')
             }
 

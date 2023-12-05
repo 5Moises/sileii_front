@@ -91,7 +91,6 @@ function G_Equipments() {
 
   const fetchCoordinatorequipment = async (userId, token) => {
     try {
-      console.log(labData.registro_id)
       const response = await axios.get(`${API_BASE_URL}coordinador/equipos/${labData.registro_id}`, {
         headers: {
           'Authorization': `Bearer ${token}`,

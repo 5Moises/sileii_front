@@ -7,18 +7,22 @@ import { API_BASE_URL } from '../js/config';
 
 function ProyectForm() {
   const location = useLocation();
-  const labData = location.state?.userToEdit;
-  const [fileName, setFileName] = useState(labData?.nombre_documento || "");  // Inicializa fileName con el valor de labData.nombre_documento
+  const labToEdit = location.state?.labData;
+  const [fileName, setFileName] = useState(labToEdit?.nombre_documento || "");  // Inicializa fileName con el valor de labToEdit.nombre_documento
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef();
-  const [nombreProyecto, setNombreProyecto] = useState(labData?.nombre_proyecto || "");
-  const [investigador, setInvestigador] = useState(labData?.investigador_principal || "");
-  const [coinvestigadores, setCoinvestigadores] = useState(labData?.coinvestigadores || "");
-  const [doi, setDOI] = useState(labData?.doi || "");
-  const [resumen, setResumen] = useState(labData?.resumen || "");
-  const [iba, setIBA] = useState(labData?.iba || "");
-  const [etapa, setetapa] = useState(labData?.etapa || "");
+  const [titulo, settitulo] = useState(labToEdit?.nombre_proyecto || "");
+  const [investigador, setInvestigador] = useState(labToEdit?.investigador_principal || "");
+  const [coinvestigadores, setCoinvestigadores] = useState(labToEdit?.coinvestigadores || "");
+  const [doi, setDOI] = useState(labToEdit?.doi || "");
+  const [resumen, setResumen] = useState(labToEdit?.resumen || "");
+  const [iba, setIBA] = useState(labToEdit?.iba || "");
+  const [etapa, setetapa] = useState(labToEdit?.etapa || "");
 
+  const [instituto_id, setinstituto_id] = useState(parseInt(labToEdit?.instituto_id, 10));
+  const [equipos_id, setEquipos_id] = useState(parseInt(labToEdit?.funcion_id, 10));
+  const [fecha_fin, setfecha_fin] = useState(labToEdit.fecha_fin || '');
+  const [fecha_inicio, setfecha_inicio] = useState(labToEdit.fecha_inicio || '');
   const navigate = useNavigate(); // Hook para la navegación
 
   const handleFileNameChange = (e) => {
@@ -30,8 +34,8 @@ function ProyectForm() {
     setSelectedFile(file);
     setFileName(file.name);
   };
-  const handleNombreProyectoChange = (e) => {
-    setNombreProyecto(e.target.value);
+  const handletituloChange = (e) => {
+    settitulo(e.target.value);
   };
 
   const handleInvestigadorChange = (e) => {
@@ -60,7 +64,7 @@ function ProyectForm() {
       const formData = new FormData();
 
       formData.append("nombre_imagen", fileName);
-      formData.append("nombre_proyecto", nombreProyecto);
+      formData.append("nombre_proyecto", titulo);
       formData.append("investigador_principal", investigador);
       formData.append("coinvestigadores", coinvestigadores);
       formData.append("doi", doi);
@@ -70,11 +74,11 @@ function ProyectForm() {
       formData.append("etapa", etapa);
 
 
-      if (!labData || labData.registro_id === undefined) {
+      if (!labToEdit || labToEdit.registro_id === undefined) {
         console.error('registro_id no está definido.');
         return;
       }
-      formData.append('registro_id', labData.registro_id);
+      formData.append('registro_id', labToEdit.registro_id);
 
       const token = localStorage.getItem('token');
       if (!token) {
@@ -92,19 +96,19 @@ function ProyectForm() {
 
       let response;
 
-      if (labData.proyecto_id) {
-        const apiUrl = `${API_BASE_URL}coordinador/proyectos/update/${labData.proyecto_id}`;
-        // Si labData.nombre_documento tiene datos, realiza una solicitud PUT
+      if (labToEdit.proyecto_id) {
+        const apiUrl = `${API_BASE_URL}coordinador/proyectos/update/${labToEdit.proyecto_id}`;
+        // Si labToEdit.nombre_documento tiene datos, realiza una solicitud PUT
         response = await axios.post(apiUrl, formData, config);
       } else {
         const apiUrl = `${API_BASE_URL}coordinador/proyectos`;
-        // Si labData.nombre_documento no tiene datos, realiza una solicitud POST
+        // Si labToEdit.nombre_documento no tiene datos, realiza una solicitud POST
         response = await axios.post(apiUrl, formData, config);
       }
 
 
       // Redirige al usuario después de una respuesta exitosa
-      navigate('/ManageProyects', { state: { labData } });
+      navigate('/ManageProyects', { state: { labToEdit } });
     } catch (error) {
       console.error('Error:', error);
     }
@@ -141,84 +145,15 @@ function ProyectForm() {
         <Grid item xs={6}>
           <TextField
             fullWidth
-            name="nombreProyecto"
-            label="Nombre"
+            name="titulo"
+            label="Titulo"
             variant="outlined"
             size="small"
             margin="dense"
             InputLabelProps={{ style: styles.label }}
             style={styles.textField}
-            value={nombreProyecto}
-            onChange={handleNombreProyectoChange}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            fullWidth
-            name="imagenReferencial"
-            label="Imagen de Equipos"
-            variant="outlined"
-            size="small"
-            margin="dense"
-            InputLabelProps={{ style: styles.label }}
-            style={styles.textField}
-            value={fileName || ' '}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end" style={styles.inputWithIcon}>
-                  <IconButton edge="end" onClick={triggerFileSelect}>
-                    <AttachFileIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <input type="file" ref={fileInputRef} style={styles.fileInput} onChange={handleFileChange} />
-        </Grid>
-      </Grid>
-      <Grid container spacing={2} direction="row">
-        <Grid item xs={6}>
-          <TextField
-            fullWidth
-            name="investigador"
-            label="Investigador"
-            variant="outlined"
-            size="small"
-            margin="dense"
-            InputLabelProps={{ style: styles.label }}
-            style={styles.textField}
-            value={investigador}
-            onChange={handleInvestigadorChange}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            fullWidth
-            name="doi"
-            label="DOI"
-            variant="outlined"
-            size="small"
-            margin="dense"
-            InputLabelProps={{ style: styles.label }}
-            style={styles.textField}
-            value={doi}
-            onChange={handleDOIChange}
-          />
-        </Grid>
-      </Grid>
-      <Grid container spacing={2} direction="row">
-        <Grid item xs={6}>
-          <TextField
-            fullWidth
-            name="coinvestigadores"
-            label="Co-Investigadores"
-            variant="outlined"
-            size="small"
-            margin="dense"
-            InputLabelProps={{ style: styles.label }}
-            style={styles.textField}
-            value={coinvestigadores}
-            onChange={handleCoinvestigadoresChange}
+            value={titulo}
+            onChange={handletituloChange}
           />
         </Grid>
         <Grid item xs={6}>
@@ -235,20 +170,38 @@ function ProyectForm() {
             onChange={handleResumenChange}
           />
         </Grid>
+
       </Grid>
       <Grid container spacing={2} direction="row">
         <Grid item xs={6}>
           <TextField
             fullWidth
-            name="iba"
-            label="IBA"
+            name="investigador"
+            label="Investigadores"
             variant="outlined"
             size="small"
             margin="dense"
             InputLabelProps={{ style: styles.label }}
             style={styles.textField}
-            value={iba}
-            onChange={handleIBAChange}
+            value={investigador}
+            onChange={handleInvestigadorChange}
+          />
+        </Grid>
+
+      </Grid>
+      <Grid container spacing={2} direction="row">
+        <Grid item xs={6}>
+          <TextField
+            fullWidth
+            name="coinvestigadores"
+            label="Co-Investigadores"
+            variant="outlined"
+            size="small"
+            margin="dense"
+            InputLabelProps={{ style: styles.label }}
+            style={styles.textField}
+            value={coinvestigadores}
+            onChange={handleCoinvestigadoresChange}
           />
         </Grid>
         <Grid item xs={6} sx={{ marginTop: '8px', }}>
@@ -270,6 +223,41 @@ function ProyectForm() {
               <MenuItem value={"Finalizado"}>Finalizado</MenuItem>
             </Select>
           </FormControl>
+        </Grid>
+
+      </Grid>
+      <Grid item spacing={2} direction="row">
+        <Grid sm={6}>
+          <TextField
+            label="Fecha de Incio"
+            type="date"
+            size="small"
+            margin="dense"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            fullWidth
+            value={fecha_inicio}
+            onChange={(e) => setfecha_inicio(e.target.value)}
+          />
+        </Grid>
+
+
+      </Grid>
+      <Grid item spacing={2} direction="row">
+        <Grid sm={6}>
+          <TextField
+            label="Fecha de Finalización"
+            type="date"
+            size="small"
+            margin="dense"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            fullWidth
+            value={fecha_fin}
+            onChange={(e) => setfecha_fin(e.target.value)}
+          />
         </Grid>
       </Grid>
       <br />

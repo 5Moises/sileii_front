@@ -164,7 +164,7 @@ function ResponsiveAppBar() {
 
         if (response.status === 200) {
           const { usuarios } = response.data;
-          console.log(response.data)
+          
           const user = usuarios[0];
           const nombreUsuario = user.correo;
           const rol = user.rol.rol_id;

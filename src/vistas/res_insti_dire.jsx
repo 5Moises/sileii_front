@@ -49,7 +49,7 @@ function ListaLab() {
                    
                     const rawData = response.data.institutos;
                     const filteredData = rawData.filter(entry => entry.estado === true && entry.usuario_director === parseInt(id_dire,10) );
-                    console.log(filteredData)
+                    
 
                     setLab(filteredData);
                 } else {
@@ -93,7 +93,7 @@ function ListaLab() {
           });
     
           if (response.status === 200) {
-            const updatedUsers = users.filter(user => user.registro_id !== userId ) ;
+            const updatedUsers = users.filter(user => user.registro_id !== userId );
             fetchLab(); 
           } else {
             console.error('Error en la respuesta de la API:', response.status);

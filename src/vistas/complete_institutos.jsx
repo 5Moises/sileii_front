@@ -1,3 +1,4 @@
+// Importar React y otras dependencias
 import React, { useState, useRef, useEffect } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -5,7 +6,9 @@ import axios from 'axios'; // Asumiendo que estás usando axios para las peticio
 import { API_BASE_URL } from '../js/config';
 import { ListItemText, Checkbox, MenuItem, Select, Container, Grid, TextField, Button, Typography, IconButton, Paper, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel } from '@mui/material';
 
+// Componente funcional MyFormPage
 const MyFormPage = () => {
+    // Hooks de estado y referencia
     const navigate = useNavigate();
     const [dialogOpen, setDialogOpen] = useState(false);
     const [dialogMessage, setDialogMessage] = useState('');
@@ -26,10 +29,10 @@ const MyFormPage = () => {
 
     const [error, setError] = useState(false);
 
+    // Efecto para cargar datos iniciales
     useEffect(() => {
         const fetchUsers = async () => {
             const token = localStorage.getItem('token');
-            console.log(labToEdit?.comite_directivo)
             if (!token) {
                 console.error('Token de autenticación no encontrado en el localStorage.');
                 return;
@@ -57,9 +60,13 @@ const MyFormPage = () => {
 
         fetchUsers();
     }, []);
+
+    // Función para cancelar la operación y volver atrás
     const handleCancel = () => {
         navigate(-1);
     };
+
+    // Estilos definidos para el componente
     const styles = {
         label: {
             color: '#555',
@@ -83,14 +90,20 @@ const MyFormPage = () => {
             display: 'none',
         },
     };
+    
+    // Función para abrir el diálogo de selección de archivo
     const triggerFileSelect = () => {
         fileInputRef.current.click();
     };
+    
+    // Función para manejar el cambio de archivo seleccionado
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         setSelectedFile(file);
         setFileName(file.name);
     };
+
+    // Función para guardar la información del formulario
     const handleSave = async () => {
         if (!mision || !vision || !instituto_id || !historia || !ubicacion || !contacto || !comite_directivo || !url_instituto) {
             setError(true);
@@ -135,8 +148,6 @@ const MyFormPage = () => {
                     setDialogOpen(true);
 
                 }
-
-
                 // Aquí puedes añadir lógica adicional para manejar la respuesta del servidor, como navegación o mensajes de éxito/error.
             } catch (error) {
                 setDialogMessage("Error al enviar el formulario:", error);
@@ -145,6 +156,8 @@ const MyFormPage = () => {
             }
         }
     };
+
+    // Función para cerrar el diálogo de información
     const handleCloseDialog = () => {
         if (dialogMessage === 'Petición exitosa') {
             navigate(-1);
@@ -154,9 +167,13 @@ const MyFormPage = () => {
         }
 
     };
+    
+    // Función para manejar el cambio en el nombre del archivo
     const handleFileNameChange = (e) => {
         setFileName(e.target.value);
     };
+    
+    // Definir roles disponibles
     const roles = [
         { id: 1, name: 'Presidente' },
         { id: 2, name: 'Vicepresidente' },
@@ -164,14 +181,19 @@ const MyFormPage = () => {
         { id: 4, name: 'Tesorero' },
         // ... otros roles
     ];
+    
+    // Función para manejar el cambio en los roles seleccionados
     const handleChange = (event) => {
         // Set the selected roles to the new value
         setcomite_directivo(event.target.value);
     };
 
+    // Renderizar componente de carga si aún se están cargando los datos
     if (isLoading) {
         return <div>Cargando...</div>;
     }
+
+    // Retornar el JSX del formulario
     return (
         <Container maxWidth="md" sx={{ py: 8 }}> {/* Padding top and bottom */}
             <Paper elevation={3} sx={{ p: { xs: 2, md: 4 } }}> {/* Responsive padding */}
@@ -188,6 +210,7 @@ const MyFormPage = () => {
                         </Typography>
                     </Grid>
 
+                    {/* Campos del formulario */}
                     <Grid item xs={12}>
                         <TextField
                             label="Mision"
@@ -237,7 +260,7 @@ const MyFormPage = () => {
                         />
                     </Grid>
 
-
+                    {/* Selector de roles del comité directivo */}
                     <Grid item xs={12}>
                         {comite_directivo.length > 0 ? (
                             <FormControl variant="outlined" fullWidth>
@@ -287,7 +310,7 @@ const MyFormPage = () => {
                         />
                     </Grid>
 
-
+                    {/* Campos relacionados con la imagen y la URL */}
                     <Grid item xs={12} container alignItems="flex-end" spacing={2}>
                         <Grid item xs={6}>
                             <TextField
@@ -326,7 +349,7 @@ const MyFormPage = () => {
                         />
                     </Grid>
 
-
+                    {/* Botones para cancelar y guardar */}
                     <Grid item xs={12} display="flex" justifyContent="flex-end" gap={2}>
                         <Button variant="outlined" onClick={handleCancel}>
                             Cancelar
@@ -337,6 +360,8 @@ const MyFormPage = () => {
                     </Grid>
                 </Grid>
             </Paper>
+            
+            {/* Diálogo de información */}
             <Dialog open={dialogOpen} onClose={handleCloseDialog}>
                 <DialogTitle>Información</DialogTitle>
                 <DialogContent>

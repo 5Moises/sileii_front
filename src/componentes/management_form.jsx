@@ -121,7 +121,7 @@ function ManagementForm() {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log(response);
+          
           navigate(redirectUrl);
         } else {
           console.error("Error en la respuesta de la API:", response.status);

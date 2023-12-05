@@ -105,7 +105,6 @@ function EquipmentForm() {
       formPayload.append("insumos", insumos);
       formPayload.append("descripcion", descripcion);
       formPayload.append("imagen_equipo", file);
-      console.log(fileName);
 
       // Verificar existencia de datos y token      
       if (!labData || labData.registro_id === undefined) {
@@ -133,7 +132,6 @@ function EquipmentForm() {
 
       // Verificar si el equipo ya tiene un ID (solicitud PUT) o no (solicitud POST)      
       if (labData.equipo_id) {
-        console.log(labData.equipo_id)
         const apiUrl = `${API_BASE_URL}coordinador/equipos/${labData.equipo_id}`;
         // Si labData.nombre_documento tiene datos, realiza una solicitud PUT
         response = await axios.post(apiUrl, formPayload, config);
@@ -144,7 +142,6 @@ function EquipmentForm() {
       }
 
       // Registrar la respuesta en la consola      
-      console.log("Response:", response.data);
 
       // Redirige al usuario después de una respuesta exitosa
       if (response.status === 200) {
