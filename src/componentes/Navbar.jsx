@@ -55,6 +55,8 @@ const pageIcons = {
   'Asignar Director': <SchoolIcon />,
   'Institutos': <AccountBalanceIcon />,
   'Registrar Comite': <GroupAddIcon />,
+  'Todos Los Institutos': <AccountBalanceIcon />,
+  'Todos Los Laboratorios': <WorkspacePremiumIcon />,
 };
 const settings = ['Perfil', 'Cerrar Sesión'];
 const pageRoutes = {
@@ -72,8 +74,9 @@ const pageRoutes = {
   'Solicitud de Mantenimiento': '/res_maintenance',
   'Asignar Director': '/gestion_resp_insti',
   'Institutos': '/res_insti_dire',
-  'Registrar Comite': '/res_users_director'
-
+  'Registrar Comite': '/res_users_director',
+  'Todos Los Institutos':'/res_insti_public',
+  'Todos Los Laboratorios':'/res_laboratory_public',
 };
 // Definimos estilos CSS para el componente.
 
@@ -130,6 +133,46 @@ function getPagesForRole(rol) {
         title: 'Gestión laboratorios',
         subpages: ['Mis Laboratorios']
       },];
+    }
+  }
+  if (rol === 6) {
+    {
+      return [
+        
+        //'Inicio',
+        //'Gestion de Usuarios',
+        'Asignar Coordinador',
+        'Gestion de Laboratorios',  
+        'Todos Los Laboratorios',
+        //'Solicitud de Mantenimiento',
+        //'Asignar Director',
+        //'Gestion de Equipos',
+        {
+          title: 'Configuración',
+          subpages: ['Área', 'Lineas de Investigación']
+        },
+      ];
+    }
+  }
+  if (rol === 7) {
+    {
+      return [
+        //'Inicio',
+        //'Gestion de Usuarios',
+        //'Asignar Coordinador',
+        //'Gestion de Laboratorios',  
+        //'Solicitud de Mantenimiento',
+        'Asignar Director',
+        'Institutos',
+        'Registrar Comite',
+        'Todos Los Institutos'
+        //'Gestion de Equipos',
+        //{
+        //  title: 'Configuración',
+        //  subpages: ['Área', 'Lineas de Investigación']
+        //},
+
+      ];
     }
   }
 }

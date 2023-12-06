@@ -411,6 +411,8 @@ function UserForm() {
               <MenuItem value={2}>Coordinador</MenuItem>
               <MenuItem value={4}>Director</MenuItem>
               <MenuItem value={5}>Comite Directivo	</MenuItem>
+              <MenuItem value={6}>Admin de Laboratorio</MenuItem>
+              <MenuItem value={7}>Admin de Instituto</MenuItem>
 
             </Select>
             {formErrors.rol && <p style={{ color: '#D32F2F', fontSize: '12px', marginTop: '4px' }}>Selecciona un rol</p>}

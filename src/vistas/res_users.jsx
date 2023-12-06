@@ -175,7 +175,7 @@ function ResUsers() {
                   <TableRow key={index}>
                     <TableCell sx={{ textAlign: 'center' }}>{user.usuario_id}</TableCell>
                     <TableCell sx={{ textAlign: 'center' }}>{user.nombre} {user.apellido_paterno} {user.apellido_materno}</TableCell>
-                    <TableCell sx={{ textAlign: 'center' }}>  {user.rol_id === 5 ? 'Comite Directivo' : user.rol_id === 1 ? 'Administrador' : user.rol_id === 3 ? 'Operador' : user.rol_id === 2 ? 'Coordinador' : user.rol_id === 4 ? 'Director' : 'Desconocido'}</TableCell>
+                    <TableCell sx={{ textAlign: 'center' }}>  {user.rol_id === 7 ? 'adminstradorinst' : user.rol_id === 6 ? 'administradorlab' :user.rol_id === 5 ? 'Comite Directivo' : user.rol_id === 1 ? 'Administrador' : user.rol_id === 3 ? 'Operador' : user.rol_id === 2 ? 'Coordinador' : user.rol_id === 4 ? 'Director' : 'Desconocido'}</TableCell>
                     <TableCell sx={{ textAlign: 'center' }}>{user.correo}</TableCell>
                     <TableCell sx={{ textAlign: 'center' }}>
                       <Grid container spacing={1} alignItems="center" justifyContent="center">
