@@ -136,7 +136,7 @@ const MyFormPage = () => {
             formData.append("ubicacion", ubicacion);
             formData.append("comite_directivo", comite_directivo);
             formData.append("url_instituto", url_instituto);
-
+            formData.append("url_facebook", 'https://www.facebook.com/profile.php?id=100091377102698');  
 
             try {
                 const apiUrl = `${API_BASE_URL}directores/completar/${instituto_id}`;

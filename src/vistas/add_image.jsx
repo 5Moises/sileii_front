@@ -203,7 +203,7 @@ function ImgForm() {
     };
 
     const handleCloseDialog = () => {
-        if (dialogMessage === 'Petición exitosa') {
+        if (dialogMessage === 'La imagen se guardó Exitosamente') {
             navigate(-1);
         }
         else {

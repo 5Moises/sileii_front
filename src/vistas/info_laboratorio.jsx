@@ -17,6 +17,7 @@ function App() {
 
         if (token) {
             setShowPaper(true);
+           
         } else {
             setShowPaper(false);
         }

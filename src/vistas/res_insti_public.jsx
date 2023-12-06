@@ -29,11 +29,7 @@ function ListaLab() {
 
     useEffect(() => {
         const fetchLab = async () => {
-            try {
-              
-
-               
-
+            try {       
                 const response = await axios.get(`${API_BASE_URL}institutos`, {
                     headers: {
                       
