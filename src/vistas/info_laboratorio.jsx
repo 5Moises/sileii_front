@@ -17,7 +17,7 @@ function App() {
 
         if (token) {
             setShowPaper(true);
-           
+
         } else {
             setShowPaper(false);
         }
@@ -30,7 +30,22 @@ function App() {
     const handleViewEquipos = (userToEdit) => navigate('/res_equipo_public', { state: { userToEdit } });
     const handleViewGalery = (labData) => navigate('/res_galeria_public', { state: { labData } });
 
-    
+    const handlecrudequipos = () => {
+        navigate('/res_equipment', { state: { labData } });
+    };
+    const handlecrudproyects = () => {
+        navigate('/ManageProyects', { state: { labData } });
+    };
+    const handlecrudoposted = () => {
+        navigate('/res_publicaciones_public', { state: { labData } });
+    };
+    const handlecrudservice = () => {
+        navigate('/res_servicios_public', { state: { labData } });
+    };
+    const handlecrudgalery = () => {
+        navigate('/res_galeria_public', { state: { labData } });
+    };
+
     return (
         <Container
             maxWidth="lg"
@@ -60,7 +75,7 @@ function App() {
                         <img
                             src={Escudo}
                             alt="Logo-Sileii"
-                            style={{ width: "50%" ,heigth: "auto" }}
+                            style={{ width: "50%", heigth: "auto" }}
                         />
                     </Box>
 
@@ -125,7 +140,26 @@ function App() {
                         <Typography variant="body1" paragraph align="left">
                             {labData.ubicacion}
                         </Typography>
-                        {showPaper ? (<><></></>) : (
+                        {showPaper ? (<Grid item xs={12} sm={12} md={6} lg={8}>
+                            <Box display="flex" justifyContent="center" alignItems="center">
+                                <Button variant="contained" color="primary" style={{ margin: "10px", fontSize: "15px", background: "#64001d" }} onClick={() => handlecrudequipos()}>
+                                    Gestión Equipo
+                                </Button>
+                                <Button variant="contained" style={{ margin: "10px", fontSize: "15px", background: "#64001d" }} onClick={() => handlecrudproyects()}>
+                                    Gestión Proyectos
+                                </Button>
+                                <Button variant="contained" style={{ margin: "10px", fontSize: "15px", background: "#64001d" }} onClick={() => handlecrudoposted()}>
+                                    Gestión de Publicaciones
+                                </Button>
+                                <Button variant="contained" style={{ margin: "10px", fontSize: "15px", background: "#64001d" }} onClick={() => handlecrudservice()}>
+                                    Gestión Servicios
+                                </Button>
+                                <Button variant="contained" style={{ margin: "10px", fontSize: "15px", background: "#64001d" }} onClick={() => handlecrudgalery()}>
+                                    Galeria de fotos
+                                </Button>
+
+                            </Box>
+                        </Grid>) : (
                             <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <Typography
                                     variant="h5"
